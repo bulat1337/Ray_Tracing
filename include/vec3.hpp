@@ -1,0 +1,156 @@
+#ifndef VEC_3_HPP
+#define VEC_3_HPP
+
+#include <cmath>
+#include <iostream>
+
+class Vec3
+{
+	private:
+		double coords[3];
+	public:
+		Vec3() : coords{0, 0, 0} {}
+
+		Vec3(double x, double y, double z)
+		{
+			coords[0] = x;
+			coords[1] = y;
+			coords[2] = z;
+		}
+
+		const double &x() const
+		{
+			return coords[0];
+		}
+
+		const double &y() const
+		{
+			return coords[1];
+		}
+
+		const double &z() const
+		{
+			return coords[2];
+		}
+
+		double operator [] (size_t id) const
+		{
+			return coords[id];
+		}
+
+		double &operator [] (size_t id)
+		{
+			return coords[id];
+		}
+
+		Vec3 &operator +=(const Vec3 &other)
+		{
+			coords[0] += other.coords[0];
+			coords[1] += other.coords[1];
+			coords[2] += other.coords[2];
+
+			return *this;
+		}
+
+		Vec3 &operator *=(double scalar)
+		{
+			coords[0] *= scalar;
+			coords[1] *= scalar;
+			coords[2] *= scalar;
+
+			return *this;
+		}
+
+		Vec3 &operator /=(double scalar)
+		{
+			return *this *= (1 / scalar);
+		}
+
+		Vec3 operator - ()
+		{
+			return Vec3(-coords[0], -coords[1], -coords[2]);
+		}
+
+		double sq_length() const
+		{
+			return 	coords[0] * coords[0] +
+					coords[1] * coords[1] +
+					coords[2] * coords[2];
+		}
+
+		double length() const
+		{
+			return std::sqrt(sq_length());
+		}
+
+};
+
+inline Vec3 operator + (const Vec3 &lhs, const Vec3 &rhs)
+{
+	return Vec3(	lhs.x() + rhs.x(),
+					lhs.y() + rhs.y(),
+					lhs.z() + rhs.z()	);
+}
+
+inline Vec3 operator - (const Vec3 &lhs, const Vec3 &rhs)
+{
+	return Vec3(	lhs.x() - rhs.x(),
+					lhs.y() - rhs.y(),
+					lhs.z() - rhs.z()	);
+}
+
+inline Vec3 operator * (const Vec3 &lhs, const Vec3 &rhs)
+{
+	return Vec3(	lhs.x() * rhs.x(),
+					lhs.y() * rhs.y(),
+					lhs.z() * rhs.z()	);
+}
+
+inline Vec3 operator * (const Vec3 &lhs, double scalar)
+{
+	return Vec3(	lhs.x() * scalar,
+					lhs.y() * scalar,
+					lhs.z() * scalar	);
+}
+
+inline Vec3 operator * (double scalar, const Vec3 &vector)
+{
+	return vector * scalar;
+}
+
+inline Vec3 operator / (const Vec3 &vector, double scalar)
+{
+	return vector * (1 / scalar);
+}
+
+inline std::ostream &operator << (std::ostream &out, const Vec3 &vector)
+{
+	out << vector.x() << ' ' << vector.y() << ' ' << vector.z();
+
+	return out;
+}
+
+inline double dot(const Vec3 &lhs, const Vec3 &rhs)
+{
+	return 	lhs.x() * rhs.x() +
+			lhs.y() * rhs.y() +
+			lhs.z() * rhs.z();
+}
+
+inline Vec3 cross(const Vec3& lhs, const Vec3& rhs)
+{
+	return Vec3(	lhs.y() * rhs.z() - lhs.z() * rhs.y(),
+					lhs.z() * rhs.x() - lhs.x() * rhs.z(),
+					lhs.x() * rhs.y() - lhs.y() * rhs.x()	);
+}
+
+inline Vec3 unit_vector(const Vec3 &vector)
+{
+	return vector / vector.length();
+}
+
+using Point3 = Vec3;
+
+
+
+#endif
