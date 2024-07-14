@@ -3,41 +3,18 @@
 #include "color.hpp"
 #include "ray.hpp"
 #include "utils.hpp"
+#include "sphere.hpp"
+#include "hittable.hpp"
+#include "hittable_container.hpp"
 
-double sp_hit_coeff(const Point3 &sp_center, double sp_radius, const Ray &ray)
+
+Color ray_color(const Ray &ray, const Hittable_container &world)
 {
-	Vec3 sp_to_orig = sp_center - ray.origin();
-
-	double coeff_a = dot(ray.direction(), ray.direction());
-	double coeff_b = -2.0 * dot(ray.direction(), sp_to_orig);
-	double coeff_c = dot(sp_to_orig, sp_to_orig) - sp_radius * sp_radius;
-
-	double discriminant = coeff_b * coeff_b - 4 * coeff_a * coeff_c;
-
-	if(cmp_double(discriminant, 0) < 0)
+//if hit any object in the world
+	Hit_record hit_record = {};
+	if(world.hit(ray, 0, infinity, hit_record))
 	{
-		return -1.0;
-	}
-
-	return ( -coeff_b - std::sqrt(discriminant) ) / (2.0 * coeff_a);
-}
-
-Color ray_color(const Ray &ray)
-{
-// if hits the sphere
-	Point3 sp_center(0, 0, -1);
-	double sp_radius = 0.5;
-
-	double ray_coeff = sp_hit_coeff(sp_center, sp_radius, ray);
-
-
-	if(ray_coeff > 0.0)
-	{
-		Vec3 sur_normal  = unit_vector(ray.at(ray_coeff) - sp_center);
-
-		return 0.5 * Color(	sur_normal.x() + 1
-							, sur_normal.y() + 1
-							, sur_normal.z() + 1);
+		return 0.5 * (hit_record.sur_normal + Color(1, 1, 1));
 	}
 
 // gradient if it doesn't
@@ -95,6 +72,11 @@ int main()
 		camera_center - Vec3(0, 0, focal_length) - viewport_u / 2 - viewport_v / 2;
 	Point3 pixel_0_0 = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
 
+//world
+	Hittable_container world;
+	world.add(std::make_shared<Sphere>(Point3(0, 0, -1), 0.5));
+	world.add(std::make_shared<Sphere>(Point3(0, -100.5, -1), 100));
+
 
 //render
 	image_file << "P3\n";
@@ -122,7 +104,7 @@ int main()
 
 			Ray ray(camera_center, ray_dir);
 
-			auto pixel_color = ray_color(ray);
+			auto pixel_color = ray_color(ray, world);
 
 			print_color(image_file, pixel_color);
 		}

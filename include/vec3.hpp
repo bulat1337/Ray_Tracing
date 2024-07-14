@@ -66,7 +66,7 @@ class Vec3
 			return *this *= (1 / scalar);
 		}
 
-		Vec3 operator - ()
+		Vec3 operator - () const
 		{
 			return Vec3(-coords[0], -coords[1], -coords[2]);
 		}

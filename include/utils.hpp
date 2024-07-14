@@ -2,6 +2,10 @@
 #define UTILS_HPP
 
 #include <cmath>
+#include <limits>
+
+const double infinity 	= std::numeric_limits<double>::infinity();
+const double pi			= 3.141'592'653'589'793'238'462;
 
 inline int cmp_double(double first_double, double second_double)
 {
@@ -23,6 +27,11 @@ inline int cmp_double(double first_double, double second_double)
     {
         return -1;
     }
+}
+
+inline double degrees_to_radians(double degrees)
+{
+	return degrees * pi / 180.0;
 }
 
 #endif
