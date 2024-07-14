@@ -2,9 +2,45 @@
 
 #include "color.hpp"
 #include "ray.hpp"
+#include "utils.hpp"
+
+double sp_hit_coeff(const Point3 &sp_center, double sp_radius, const Ray &ray)
+{
+	Vec3 sp_to_orig = sp_center - ray.origin();
+
+	double coeff_a = dot(ray.direction(), ray.direction());
+	double coeff_b = -2.0 * dot(ray.direction(), sp_to_orig);
+	double coeff_c = dot(sp_to_orig, sp_to_orig) - sp_radius * sp_radius;
+
+	double discriminant = coeff_b * coeff_b - 4 * coeff_a * coeff_c;
+
+	if(cmp_double(discriminant, 0) < 0)
+	{
+		return -1.0;
+	}
+
+	return ( -coeff_b - std::sqrt(discriminant) ) / (2.0 * coeff_a);
+}
 
 Color ray_color(const Ray &ray)
 {
+// if hits the sphere
+	Point3 sp_center(0, 0, -1);
+	double sp_radius = 0.5;
+
+	double ray_coeff = sp_hit_coeff(sp_center, sp_radius, ray);
+
+
+	if(ray_coeff > 0.0)
+	{
+		Vec3 sur_normal  = unit_vector(ray.at(ray_coeff) - sp_center);
+
+		return 0.5 * Color(	sur_normal.x() + 1
+							, sur_normal.y() + 1
+							, sur_normal.z() + 1);
+	}
+
+// gradient if it doesn't
 	Vec3 unit_dir = unit_vector(ray.direction());
 
 	// std::cout << "units y coord: " << unit_dir.y() << std::endl;
@@ -39,10 +75,10 @@ int main()
 	}
 
 // camera
-	double focal_length = 5.0;
+	double focal_length = 1.0;
 
 	double viewport_height = 2.0;
-	double viewport_width  = viewport_height * (image_width / image_height);
+	double viewport_width  = viewport_height * (double(image_width) / image_height);
 
 	Point3 camera_center(0, 0, 0);
 
@@ -70,11 +106,11 @@ int main()
 
 	std::clog << "Render start.\n" << std::flush;
 
-	for(size_t row = 0 ; row < image_width ; ++row)
+	for(size_t row = 0 ; row < image_height ; ++row)
 	{
 		std::clog << "loading row: " << row << '\n' << std::flush;
 
-		for(size_t col = 0 ; col < image_height ; ++col)
+		for(size_t col = 0 ; col < image_width ; ++col)
 		{
 			// auto pixel_color = Color(	static_cast<double>(col) / (image_height - 1),
 			// 							static_cast<double>(row) / (image_width  - 1),
