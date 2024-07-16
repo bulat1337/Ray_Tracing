@@ -13,8 +13,9 @@ class Camera
 {
   public:
 	double aspect_ratio	= 1;
-	size_t image_width 	= 100;
-	size_t sampling		= 10;
+	size_t image_width 	= 400;
+	size_t sampling		= 1;
+	size_t max_depth    = 10;
 
 	Camera() = default;
 
@@ -35,17 +36,19 @@ class Camera
 
 			for(size_t col = 0 ; col < image_width ; ++col)
 			{
-				Point3 pixel_center = pixel_0_0 + row * (delta_v) + col * (delta_u);
+// 				Point3 pixel_center = pixel_0_0 + row * (delta_v) + col * (delta_u);
+//
+// 				Vec3 ray_dir = pixel_center - camera_center;
+//
+// 				Color pixel_color = ray_color(Ray(camera_center, ray_dir), max_depth, world);
 
-				Vec3 ray_dir = pixel_center - camera_center;
+				Color pixel_color(0, 0, 0);
 
-				Color pixel_color = ray_color(Ray(camera_center, ray_dir), world);
-
-				for(size_t id = 1 ; id < sampling ; ++id)
+				for(size_t id = 0 ; id < sampling ; ++id)
 				{
 					Ray ray = get_sample_ray(col, row);
 
-					pixel_color += ray_color(ray, world);
+					pixel_color += ray_color(ray, max_depth, world);
 				}
 
 				print_color(image_file, pixel_color * sampling_scale);
@@ -96,13 +99,20 @@ class Camera
 
 	}
 
-	Color ray_color(const Ray &ray, const Hittables &world)
+	Color ray_color(const Ray &ray, size_t depth, const Hittables &world)
 	{
+		if(depth <= 0)
+		{
+			return Color(0, 0, 0);
+		}
+
 		Hit_record hit_record;
 
-		if(world.hit(ray, Interval(0, infinity), hit_record))
+		if(world.hit(ray, Interval(0.001, infinity), hit_record))
 		{
-			return 0.5 * (hit_record.sur_normal + Color(1, 1, 1));
+			Vec3 rand_dir = rand_on_hemisp(hit_record.sur_normal);
+
+			return 0.5 * ray_color(Ray(hit_record.hit_point, rand_dir), depth - 1, world);
 		}
 
 

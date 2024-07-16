@@ -18,11 +18,11 @@ public:
 				, Interval interval
 				, Hit_record &record) const override
 	{
-		Vec3 sp_to_orig = center - ray.origin();
+		Vec3 orig_to_spehre = center - ray.origin();
 
 		double coeff_a = ray.direction().sq_length();
-		double coeff_b = dot(ray.direction(), sp_to_orig);
-		double coeff_c = sp_to_orig.sq_length() - radius * radius;
+		double coeff_b = dot(ray.direction(), orig_to_spehre);
+		double coeff_c = orig_to_spehre.sq_length() - radius * radius;
 
 		double discriminant = coeff_b * coeff_b - coeff_a * coeff_c;
 

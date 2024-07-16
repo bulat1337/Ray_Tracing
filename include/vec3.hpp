@@ -4,6 +4,8 @@
 #include <cmath>
 #include <iostream>
 
+#include "utils.hpp"
+
 class Vec3
 {
 private:
@@ -83,6 +85,20 @@ public:
 		return std::sqrt(sq_length());
 	}
 
+	static Vec3 random()
+	{
+		return Vec3(	get_random()
+						, get_random()
+						, get_random());
+	}
+
+	static Vec3 random(double min, double max)
+	{
+		return Vec3(	get_random(min, max)
+						, get_random(min, max)
+						, get_random(min, max)	);
+	}
+
 };
 
 inline Vec3 operator + (const Vec3 &lhs, const Vec3 &rhs)
@@ -147,6 +163,39 @@ inline Vec3 cross(const Vec3& lhs, const Vec3& rhs)
 inline Vec3 unit_vector(const Vec3 &vector)
 {
 	return vector / vector.length();
+}
+
+inline Vec3 rand_in_unit_sp()
+{
+	while(true)
+	{
+		Vec3 vec = Vec3::random(-1, 1);
+
+		if(vec.sq_length() < 1)
+		{
+			return vec;
+		}
+	}
+}
+
+inline Vec3 rand_unit_vec()
+{
+	return unit_vector(rand_in_unit_sp());
+}
+
+inline Vec3 rand_on_hemisp(const Vec3 &normal)
+{
+	Vec3 on_unit_sphere = rand_unit_vec();
+
+	if(dot(on_unit_sphere, normal) > 0.0)
+	{
+		return on_unit_sphere;
+	}
+	else
+	{
+		return -on_unit_sphere;
+	}
+
 }
 
 using Point3 = Vec3;
