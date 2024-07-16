@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <limits>
+#include <cstdlib>
 
 const double infinity 	= std::numeric_limits<double>::infinity();
 const double pi			= 3.141'592'653'589'793'238'462;
@@ -32,6 +33,16 @@ inline int cmp_double(double first_double, double second_double)
 inline double degrees_to_radians(double degrees)
 {
 	return degrees * pi / 180.0;
+}
+
+inline double get_random()
+{
+	return rand() / (RAND_MAX + 1.0);
+}
+
+inline double get_random(double min, double max)
+{
+	return min + (max - min) * get_random();
 }
 
 #endif

@@ -10,6 +10,7 @@ int main()
 // image width and aspect_ratio
 	camera.image_width  = 400;
 	camera.aspect_ratio = 16.0 / 9.0;
+	camera.sampling = 100;
 
 // world
 	Hittables world;

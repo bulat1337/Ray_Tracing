@@ -13,7 +13,8 @@ class Camera
 {
   public:
 	double aspect_ratio	= 1;
-	size_t image_width  		= 100;
+	size_t image_width 	= 100;
+	size_t sampling		= 10;
 
 	Camera() = default;
 
@@ -38,10 +39,16 @@ class Camera
 
 				Vec3 ray_dir = pixel_center - camera_center;
 
-				Ray ray(camera_center, ray_dir);
+				Color pixel_color = ray_color(Ray(camera_center, ray_dir), world);
 
-				auto pixel_color = ray_color(ray, world);
-				print_color(image_file, pixel_color);
+				for(size_t id = 1 ; id < sampling ; ++id)
+				{
+					Ray ray = get_sample_ray(col, row);
+
+					pixel_color += ray_color(ray, world);
+				}
+
+				print_color(image_file, pixel_color * sampling_scale);
 			}
 		}
 
@@ -56,10 +63,13 @@ class Camera
 	Vec3 delta_u;
 	Vec3 delta_v;
 	std::ofstream image_file;
+	double sampling_scale = 1;
 
 	void initialize()
 	{
+		sampling_scale = 1.0 / sampling;
 		image_height = static_cast<size_t>(image_width / aspect_ratio);
+
 
 		if(image_height < 1)
 		{
@@ -114,6 +124,22 @@ class Camera
 		{
 			throw std::ofstream::failure("Unable to open image_file\n");
 		}
+	}
+
+	Ray get_sample_ray(size_t col, size_t row) const
+	{
+		Vec3 offset = sample_square();
+
+		Point3 sample_pixel = pixel_0_0 +
+						(offset.x() + col) * delta_u +
+						(offset.y() + row) * delta_v;
+
+		return Ray(camera_center, sample_pixel - camera_center);
+	}
+
+	Vec3 sample_square() const
+	{
+		return Vec3(get_random() - 0.5, get_random() - 0.5, 0);
 	}
 
 };
