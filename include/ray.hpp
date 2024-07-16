@@ -5,30 +5,30 @@
 
 class Ray
 {
-	private:
-		Point3 orig;
-		Vec3   dir;
-	public:
-		Ray() = default;
+private:
+	Point3 orig;
+	Vec3   dir;
+public:
+	Ray() = default;
 
-		Ray(const Point3 &set_orig, const Vec3 &set_dir) :
+	Ray(const Point3 &set_orig, const Vec3 &set_dir):
 		orig(set_orig),
 		dir(set_dir) {}
 
-		const Point3 &origin() const
-		{
-			return orig;
-		}
+	const Point3 &origin() const
+	{
+		return orig;
+	}
 
-		const Vec3 &direction() const
-		{
-			return dir;
-		}
+	const Vec3 &direction() const
+	{
+		return dir;
+	}
 
-		Point3 at(double coeff) const
-		{
-			return orig + coeff * dir;
-		}
+	Point3 at(double coeff) const
+	{
+		return orig + coeff * dir;
+	}
 };
 
 #endif

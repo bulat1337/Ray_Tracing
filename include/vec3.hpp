@@ -6,82 +6,82 @@
 
 class Vec3
 {
-	private:
-		double coords[3];
-	public:
-		Vec3() : coords{0, 0, 0} {}
+private:
+	double coords[3];
+public:
+	Vec3(): coords{0, 0, 0} {}
 
-		Vec3(double x, double y, double z)
-		{
-			coords[0] = x;
-			coords[1] = y;
-			coords[2] = z;
-		}
+	Vec3(double x, double y, double z)
+	{
+		coords[0] = x;
+		coords[1] = y;
+		coords[2] = z;
+	}
 
-		const double &x() const
-		{
-			return coords[0];
-		}
+	const double &x() const
+	{
+		return coords[0];
+	}
 
-		const double &y() const
-		{
-			return coords[1];
-		}
+	const double &y() const
+	{
+		return coords[1];
+	}
 
-		const double &z() const
-		{
-			return coords[2];
-		}
+	const double &z() const
+	{
+		return coords[2];
+	}
 
-		double operator [] (size_t id) const
-		{
-			return coords[id];
-		}
+	double operator [] (size_t id) const
+	{
+		return coords[id];
+	}
 
-		double &operator [] (size_t id)
-		{
-			return coords[id];
-		}
+	double &operator [] (size_t id)
+	{
+		return coords[id];
+	}
 
-		Vec3 &operator +=(const Vec3 &other)
-		{
-			coords[0] += other.coords[0];
-			coords[1] += other.coords[1];
-			coords[2] += other.coords[2];
+	Vec3 &operator +=(const Vec3 &other)
+	{
+		coords[0] += other.coords[0];
+		coords[1] += other.coords[1];
+		coords[2] += other.coords[2];
 
-			return *this;
-		}
+		return *this;
+	}
 
-		Vec3 &operator *=(double scalar)
-		{
-			coords[0] *= scalar;
-			coords[1] *= scalar;
-			coords[2] *= scalar;
+	Vec3 &operator *=(double scalar)
+	{
+		coords[0] *= scalar;
+		coords[1] *= scalar;
+		coords[2] *= scalar;
 
-			return *this;
-		}
+		return *this;
+	}
 
-		Vec3 &operator /=(double scalar)
-		{
-			return *this *= (1 / scalar);
-		}
+	Vec3 &operator /=(double scalar)
+	{
+		return *this *= (1 / scalar);
+	}
 
-		Vec3 operator - () const
-		{
-			return Vec3(-coords[0], -coords[1], -coords[2]);
-		}
+	Vec3 operator - () const
+	{
+		return Vec3(-coords[0], -coords[1], -coords[2]);
+	}
 
-		double sq_length() const
-		{
-			return 	coords[0] * coords[0] +
-					coords[1] * coords[1] +
-					coords[2] * coords[2];
-		}
+	double sq_length() const
+	{
+		return 	coords[0] * coords[0] +
+				coords[1] * coords[1] +
+				coords[2] * coords[2];
+	}
 
-		double length() const
-		{
-			return std::sqrt(sq_length());
-		}
+	double length() const
+	{
+		return std::sqrt(sq_length());
+	}
 
 };
 
