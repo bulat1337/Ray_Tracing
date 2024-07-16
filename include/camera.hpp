@@ -12,10 +12,10 @@
 class Camera
 {
   public:
-	double aspect_ratio	= 1;
-	size_t image_width 	= 400;
-	size_t sampling		= 1;
-	size_t max_depth    = 10;
+	double aspect_ratio		= 1;
+	size_t image_width 		= 400;
+	size_t sampling			= 1;
+	size_t diffusion_depth	= 10;
 
 	Camera() = default;
 
@@ -36,19 +36,19 @@ class Camera
 
 			for(size_t col = 0 ; col < image_width ; ++col)
 			{
-// 				Point3 pixel_center = pixel_0_0 + row * (delta_v) + col * (delta_u);
-//
-// 				Vec3 ray_dir = pixel_center - camera_center;
-//
-// 				Color pixel_color = ray_color(Ray(camera_center, ray_dir), max_depth, world);
+				Point3 pixel_center = pixel_0_0 + row * (delta_v) + col * (delta_u);
 
-				Color pixel_color(0, 0, 0);
+				Vec3 ray_dir = pixel_center - camera_center;
+
+				Color pixel_color = ray_color(Ray(camera_center, ray_dir), diffusion_depth, world);
+
+				// Color pixel_color(0, 0, 0);
 
 				for(size_t id = 0 ; id < sampling ; ++id)
 				{
 					Ray ray = get_sample_ray(col, row);
 
-					pixel_color += ray_color(ray, max_depth, world);
+					pixel_color += ray_color(ray, diffusion_depth, world);
 				}
 
 				print_color(image_file, pixel_color * sampling_scale);
