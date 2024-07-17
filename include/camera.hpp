@@ -8,6 +8,7 @@
 #include "ray.hpp"
 #include "utils.hpp"
 #include "hittables.hpp"
+#include "material.hpp"
 
 class Camera
 {
@@ -40,7 +41,8 @@ class Camera
 
 				Vec3 ray_dir = pixel_center - camera_center;
 
-				Color pixel_color = ray_color(Ray(camera_center, ray_dir), diffusion_depth, world);
+				Color pixel_color =
+					(Ray(camera_center, ray_dir), diffusion_depth, world);
 
 				// Color pixel_color(0, 0, 0);
 
@@ -106,13 +108,19 @@ class Camera
 			return Color(0, 0, 0);
 		}
 
-		Hit_record hit_record;
+		Hit_record record;
 
-		if(world.hit(ray, Interval(0.001, infinity), hit_record))
+		if(world.hit(ray, Interval(0.001, infinity), record))
 		{
-			Vec3 rand_dir = rand_on_hemisp(hit_record.sur_normal);
+			Color attenuation;
+			Ray scattered_ray;
 
-			return 0.5 * ray_color(Ray(hit_record.hit_point, rand_dir), depth - 1, world);
+			if(record.material->scattered(ray, record, attenuation, scattered_ray))
+			{
+				return attenuation * ray_color(scattered_ray, depth - 1, world);
+			}
+
+			return Color(0, 0, 0);
 		}
 
 

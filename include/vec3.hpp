@@ -99,6 +99,15 @@ public:
 						, get_random(min, max)	);
 	}
 
+	bool near_zero() const
+	{
+		double eps = 1e-8;
+
+		return 	(std::fabs(coords[0]) < eps) &&
+				(std::fabs(coords[1]) < eps) &&
+				(std::fabs(coords[2]) < eps);
+	}
+
 };
 
 inline Vec3 operator + (const Vec3 &lhs, const Vec3 &rhs)
@@ -196,6 +205,11 @@ inline Vec3 rand_on_hemisp(const Vec3 &normal)
 		return -on_unit_sphere;
 	}
 
+}
+
+inline Vec3 reflect(const Vec3 &ray_dir, const Vec3 &normal)
+{
+	return ray_dir - 2.0 * dot(ray_dir, normal) * normal;
 }
 
 using Point3 = Vec3;

@@ -8,11 +8,15 @@ class Sphere : public Hittable
 private:
 	Point3 center;
 	double radius = 0.0;
+	std::shared_ptr<Material> material;
 
 public:
-	Sphere(const Point3 &set_center, double set_radius):
-		center(set_center),
-		radius(fmax(set_radius, 0)) {}
+	Sphere(	const Point3 &set_center
+			, double set_radius
+			, std::shared_ptr<Material> set_material):
+		center(set_center)
+		, radius(fmax(set_radius, 0))
+		, material(set_material) {}
 
 	bool hit(	const Ray &ray
 				, Interval interval
@@ -49,6 +53,7 @@ public:
 
 		Vec3 out_normal   = (record.hit_point - center) / radius;
 		record.set_against_ray(ray, out_normal);
+		record.material = material;
 
 
 		return true;

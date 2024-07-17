@@ -1,8 +1,12 @@
 #ifndef HITTABLE_HPP
 #define HITTABLE_HPP
 
+#include <memory>
+
 #include "ray.hpp"
 #include "interval.hpp"
+
+class Material;
 
 struct Hit_record
 {
@@ -10,6 +14,7 @@ struct Hit_record
 	Vec3 sur_normal;
 	double ray_coeff;
 	bool front_faced;
+	std::shared_ptr<Material> material;
 
 	void set_against_ray(const Ray &ray, const Vec3 &out_normal)
 	{

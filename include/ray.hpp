@@ -10,7 +10,6 @@ private:
 	Vec3   dir;
 public:
 	Ray() = default;
-	Ray(const Ray &other) = default;
 
 	Ray(const Point3 &set_orig, const Vec3 &set_dir):
 		orig(set_orig),
