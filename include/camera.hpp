@@ -17,6 +17,11 @@ class Camera
 	size_t image_width 		= 400;
 	size_t sampling			= 1;
 	size_t diffusion_depth	= 10;
+	double vertical_FOV     = 90;
+
+	Point3 lookfrom         = Point3(0, 0, 0);
+	Point3 lookat           = Point3(0, 0, -1);
+	Vec3   view_up          = Vec3(0, 1, 0);
 
 	Camera() = default;
 
@@ -42,7 +47,7 @@ class Camera
 				Vec3 ray_dir = pixel_center - camera_center;
 
 				Color pixel_color =
-					(Ray(camera_center, ray_dir), diffusion_depth, world);
+					ray_color(Ray(camera_center, ray_dir), diffusion_depth, world);
 
 				// Color pixel_color(0, 0, 0);
 
@@ -65,10 +70,16 @@ class Camera
 	size_t image_height = 0;
 	Point3 camera_center;
 	Point3 pixel_0_0;
+
 	Vec3 delta_u;
 	Vec3 delta_v;
+
 	std::ofstream image_file;
 	double sampling_scale = 1;
+
+	Vec3 u_axis;
+	Vec3 v_axis;
+	Vec3 w_axis;
 
 	void initialize()
 	{
@@ -81,22 +92,27 @@ class Camera
 			image_height = 1;
 		}
 
-		camera_center = Point3(0, 0, 0);
+		camera_center = lookfrom;
 
-		double focal_length = 1.0;
+		double focal_length = (lookfrom - lookat).length();
+		double theta = degrees_to_radians(vertical_FOV);
+		double h     = std::tan(theta / 2);
 
-		double viewport_height = 2.0;
+		double viewport_height = 2 * h * focal_length;
 		double viewport_width  = viewport_height * (double(image_width) / image_height);
 
-		Vec3 viewport_u(viewport_width, 0, 0);
-		Vec3 viewport_v(0, -viewport_height, 0);
+		w_axis = unit_vector(lookfrom - lookat);
+		u_axis = unit_vector(cross(view_up, w_axis));
+		v_axis = cross(w_axis, u_axis);
+
+		Vec3 viewport_u = viewport_width * u_axis;
+		Vec3 viewport_v = viewport_height * (-v_axis);
 
 		delta_u = viewport_u / image_width;
 		delta_v = viewport_v / image_height;
 
 		Point3 viewport_upper_left =
-			camera_center - Vec3(0, 0, focal_length) - viewport_u / 2 - viewport_v / 2;
-
+			camera_center - (focal_length * w_axis) - viewport_u / 2 - viewport_v / 2;
 		pixel_0_0 = viewport_upper_left + 0.5 * (delta_u + delta_v);
 
 	}

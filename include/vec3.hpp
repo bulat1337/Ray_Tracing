@@ -212,6 +212,16 @@ inline Vec3 reflect(const Vec3 &ray_dir, const Vec3 &normal)
 	return ray_dir - 2.0 * dot(ray_dir, normal) * normal;
 }
 
+inline Vec3 refract(const Vec3 &in_ray_dir, const Vec3 &normal, double index_ratio)
+{
+	double cos_theta       = std::fmin(dot(-in_ray_dir, normal), 1.0);
+
+	Vec3 out_ray_perp      = index_ratio * (in_ray_dir + cos_theta * normal);
+	Vec3 out_ray_pharallel = -std::sqrt(std::fabs(1.0 - out_ray_perp.sq_length())) * normal;
+
+	return out_ray_perp + out_ray_pharallel;
+}
+
 using Point3 = Vec3;
 
 
