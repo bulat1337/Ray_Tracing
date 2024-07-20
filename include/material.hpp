@@ -27,7 +27,7 @@ class Lambertian : public Material
 	Lambertian(const Color &set_albedo):
 		albedo(set_albedo) {}
 
-	bool scattered(	const Ray &/*in_ray*/
+	bool scattered(	const Ray &in_ray
 					, const Hit_record &record
 					, Color &attenuation
 					, Ray &scattered_ray) const override
@@ -36,7 +36,7 @@ class Lambertian : public Material
 
 		if(scatter_dir.near_zero()) scatter_dir = record.sur_normal;
 
-		scattered_ray = Ray(record.hit_point, scatter_dir);
+		scattered_ray = Ray(record.hit_point, scatter_dir, in_ray.get_time());
 		attenuation   = albedo;
 
 		return true;
@@ -63,7 +63,7 @@ class Metal : public Material
 
 		scatter_dir = unit_vector(scatter_dir) + fuzz * rand_unit_vec();
 
-		scattered_ray = Ray(record.hit_point, scatter_dir);
+		scattered_ray = Ray(record.hit_point, scatter_dir, in_ray.get_time());
 		attenuation   = albedo;
 
 		return dot(scatter_dir, record.sur_normal) > 0;
@@ -104,7 +104,7 @@ class Dielectric : public Material
 
 		Vec3 out_ray_dir;
 		bool cannot_refract     = sin_theta * real_id > 1.0;
-		bool reflectance_factor =  reflectance(cos_theta, real_id) > get_random();
+		bool reflectance_factor = reflectance(cos_theta, real_id) > get_random();
 
 		if(cannot_refract || reflectance_factor)
 		{
@@ -115,7 +115,7 @@ class Dielectric : public Material
 			out_ray_dir = refract(unit_dir, record.sur_normal, real_id);
 		}
 
-		scattered_ray = Ray(record.hit_point, out_ray_dir);
+		scattered_ray = Ray(record.hit_point, out_ray_dir, in_ray.get_time());
 
 		return true;
 	}

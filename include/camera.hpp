@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <chrono>
 
 #include "color.hpp"
 #include "ray.hpp"
@@ -31,6 +32,7 @@ class Camera
 	void render(const Hittables world)
 	{
 		open_file("image.ppm");
+
 		initialize();
 
 		image_file << "P3\n";
@@ -41,18 +43,12 @@ class Camera
 
 		for(size_t row = 0 ; row < image_height ; ++row)
 		{
+			Time_guard time_guard;
 			std::clog << image_height - row << " rows remaining.\n" << std::flush;
 
 			for(size_t col = 0 ; col < image_width ; ++col)
 			{
-				Point3 pixel_center = pixel_0_0 + row * (delta_v) + col * (delta_u);
-
-				Vec3 ray_dir = pixel_center - camera_center;
-
-				Color pixel_color =
-					ray_color(Ray(camera_center, ray_dir), diffusion_depth, world);
-
-				// Color pixel_color(0, 0, 0);
+				Color pixel_color(0, 0, 0);
 
 				for(size_t id = 0 ; id < sampling ; ++id)
 				{
@@ -178,7 +174,10 @@ class Camera
 						(offset.y() + row) * delta_v;
 
 		Point3 ray_origin = (defocus_angle <= 0) ? camera_center : defocus_disk_sample();
-		return Ray(ray_origin, sample_pixel - ray_origin);
+
+		double ray_time = get_random();
+
+		return Ray(ray_origin, sample_pixel - ray_origin, ray_time);
 	}
 
 	Vec3 sample_square() const
