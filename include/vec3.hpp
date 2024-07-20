@@ -192,6 +192,19 @@ inline Vec3 rand_unit_vec()
 	return unit_vector(rand_in_unit_sp());
 }
 
+inline Vec3 rand_in_unit_disk()
+{
+	while(true)
+	{
+		Vec3 vec = Vec3(get_random(-1, 1), get_random(-1, 1), 0);
+
+		if(vec.sq_length() < 1)
+		{
+			return vec;
+		}
+	}
+}
+
 inline Vec3 rand_on_hemisp(const Vec3 &normal)
 {
 	Vec3 on_unit_sphere = rand_unit_vec();

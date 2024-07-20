@@ -23,6 +23,9 @@ class Camera
 	Point3 lookat           = Point3(0, 0, -1);
 	Vec3   view_up          = Vec3(0, 1, 0);
 
+	double defocus_angle = 0;
+	double focus_dist    = 10;
+
 	Camera() = default;
 
 	void render(const Hittables world)
@@ -38,7 +41,7 @@ class Camera
 
 		for(size_t row = 0 ; row < image_height ; ++row)
 		{
-			std::clog << "Loading row: " << row << '\n' << std::flush;
+			std::clog << image_height - row << " rows remaining.\n" << std::flush;
 
 			for(size_t col = 0 ; col < image_width ; ++col)
 			{
@@ -81,6 +84,9 @@ class Camera
 	Vec3 v_axis;
 	Vec3 w_axis;
 
+	Vec3 defocus_disk_u;
+	Vec3 defocus_disk_v;
+
 	void initialize()
 	{
 		sampling_scale = 1.0 / sampling;
@@ -94,11 +100,10 @@ class Camera
 
 		camera_center = lookfrom;
 
-		double focal_length = (lookfrom - lookat).length();
 		double theta = degrees_to_radians(vertical_FOV);
 		double h     = std::tan(theta / 2);
 
-		double viewport_height = 2 * h * focal_length;
+		double viewport_height = 2 * h * focus_dist;
 		double viewport_width  = viewport_height * (double(image_width) / image_height);
 
 		w_axis = unit_vector(lookfrom - lookat);
@@ -112,9 +117,13 @@ class Camera
 		delta_v = viewport_v / image_height;
 
 		Point3 viewport_upper_left =
-			camera_center - (focal_length * w_axis) - viewport_u / 2 - viewport_v / 2;
+			camera_center - (focus_dist * w_axis) - viewport_u / 2 - viewport_v / 2;
 		pixel_0_0 = viewport_upper_left + 0.5 * (delta_u + delta_v);
 
+		double defocus_radius =
+			focus_dist * std::tan(degrees_to_radians(defocus_angle / 2));
+		defocus_disk_u = u_axis * defocus_radius;
+		defocus_disk_v = v_axis * defocus_radius;
 	}
 
 	Color ray_color(const Ray &ray, size_t depth, const Hittables &world)
@@ -168,7 +177,8 @@ class Camera
 						(offset.x() + col) * delta_u +
 						(offset.y() + row) * delta_v;
 
-		return Ray(camera_center, sample_pixel - camera_center);
+		Point3 ray_origin = (defocus_angle <= 0) ? camera_center : defocus_disk_sample();
+		return Ray(ray_origin, sample_pixel - ray_origin);
 	}
 
 	Vec3 sample_square() const
@@ -176,6 +186,12 @@ class Camera
 		return Vec3(get_random() - 0.5, get_random() - 0.5, 0);
 	}
 
+	Point3 defocus_disk_sample() const
+	{
+		Vec3 point = rand_in_unit_disk();
+
+		return camera_center + (point[0] * defocus_disk_u) + (point[1] * defocus_disk_v);
+	}
 };
 
 #endif
