@@ -8,10 +8,14 @@
 
 class Hittables : public Hittable
 {
-public:
+  private:
+	AABB b_box;
+
+  public:
 	std::vector<std::shared_ptr<Hittable>> container;
 
 	Hittables() = default;
+
 	Hittables(std::shared_ptr<Hittable> object)
 	{
 		add(object);
@@ -20,6 +24,7 @@ public:
 	void add(std::shared_ptr<Hittable> object)
 	{
 		container.push_back(object);
+		b_box = AABB(b_box, object->bounding_box());
 	}
 
 	void clear()
@@ -48,6 +53,11 @@ public:
 		}
 
 		return hit_anything;
+	}
+
+	AABB bounding_box() const override
+	{
+		return b_box;
 	}
 };
 

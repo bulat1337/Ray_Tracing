@@ -17,6 +17,10 @@ public:
 		min(set_min),
 		max(set_max) {}
 
+	Interval(const Interval &inter_1, const Interval &inter_2):
+		min(fmin(inter_1.min, inter_2.min))
+		, max(fmax(inter_1.max, inter_2.max)) {}
+
 	double size() const
 	{
 		return max - min;
@@ -39,6 +43,11 @@ public:
 		if(num < min) return min;
 
 		return num;
+	}
+
+	Interval expand(double delta) const
+	{
+		return Interval(min - delta / 2, max + delta + 2);
 	}
 
 	static const Interval empty;

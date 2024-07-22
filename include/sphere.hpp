@@ -2,6 +2,7 @@
 #define SPHERE_HPP
 
 #include "hittable.hpp"
+#include "aabb.hpp"
 
 class Sphere : public Hittable
 {
@@ -11,6 +12,7 @@ private:
 	double radius = 0.0;
 	std::shared_ptr<Material> material;
 	bool   is_moving;
+	AABB b_box;
 
 	Point3 current_center(double time) const
 	{
@@ -24,7 +26,11 @@ public:
 		center_1(set_center_1)
 		, radius(fmax(set_radius, 0))
 		, material(set_material)
-		, is_moving(false) {}
+		, is_moving(false)
+	{
+		Vec3 r_vec(radius, radius, radius);
+		b_box = AABB(center_1 - r_vec, center_1 + r_vec);
+	}
 
 	Sphere(	const Point3 &set_center_1
 			, const Point3 &set_center_2
@@ -35,6 +41,13 @@ public:
 		, material(set_material)
 		, is_moving(true)
 	{
+		Vec3 r_vec(radius, radius, radius);
+
+		AABB b_box_1(center_1 - r_vec, center_1 + r_vec);
+		AABB b_box_2(set_center_2 - r_vec, set_center_2 + r_vec);
+
+		b_box = AABB(b_box_1, b_box_2);
+
 		path_dir = set_center_2 - center_1;
 	}
 
@@ -78,6 +91,11 @@ public:
 
 
 		return true;
+	}
+
+	AABB bounding_box() const override
+	{
+		return b_box;
 	}
 };
 

@@ -87,16 +87,16 @@ public:
 
 	static Vec3 random()
 	{
-		return Vec3(	get_random()
-						, get_random()
-						, get_random());
+		return Vec3(	rand_double()
+						, rand_double()
+						, rand_double());
 	}
 
 	static Vec3 random(double min, double max)
 	{
-		return Vec3(	get_random(min, max)
-						, get_random(min, max)
-						, get_random(min, max)	);
+		return Vec3(	rand_double(min, max)
+						, rand_double(min, max)
+						, rand_double(min, max)	);
 	}
 
 	bool near_zero() const
@@ -196,7 +196,7 @@ inline Vec3 rand_in_unit_disk()
 {
 	while(true)
 	{
-		Vec3 vec = Vec3(get_random(-1, 1), get_random(-1, 1), 0);
+		Vec3 vec = Vec3(rand_double(-1, 1), rand_double(-1, 1), 0);
 
 		if(vec.sq_length() < 1)
 		{

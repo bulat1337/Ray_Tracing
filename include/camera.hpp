@@ -175,14 +175,14 @@ class Camera
 
 		Point3 ray_origin = (defocus_angle <= 0) ? camera_center : defocus_disk_sample();
 
-		double ray_time = get_random();
+		double ray_time = rand_double();
 
 		return Ray(ray_origin, sample_pixel - ray_origin, ray_time);
 	}
 
 	Vec3 sample_square() const
 	{
-		return Vec3(get_random() - 0.5, get_random() - 0.5, 0);
+		return Vec3(rand_double() - 0.5, rand_double() - 0.5, 0);
 	}
 
 	Point3 defocus_disk_sample() const

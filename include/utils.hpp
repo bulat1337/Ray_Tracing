@@ -36,14 +36,19 @@ inline double degrees_to_radians(double degrees)
 	return degrees * pi / 180.0;
 }
 
-inline double get_random()
+inline double rand_double()
 {
 	return rand() / (RAND_MAX + 1.0);
 }
 
-inline double get_random(double min, double max)
+inline double rand_double(double min, double max)
 {
-	return min + (max - min) * get_random();
+	return min + (max - min) * rand_double();
+}
+
+inline int rand_int(double min, double max)
+{
+	return static_cast<int>(rand_double(min, max + 1));
 }
 
 class Time_guard

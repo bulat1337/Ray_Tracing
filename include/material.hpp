@@ -104,7 +104,7 @@ class Dielectric : public Material
 
 		Vec3 out_ray_dir;
 		bool cannot_refract     = sin_theta * real_id > 1.0;
-		bool reflectance_factor = reflectance(cos_theta, real_id) > get_random();
+		bool reflectance_factor = reflectance(cos_theta, real_id) > rand_double();
 
 		if(cannot_refract || reflectance_factor)
 		{
