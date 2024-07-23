@@ -1,5 +1,7 @@
 #!/bin/bash
+mv image.ppm ../tmp/prev.ppm
 make clean
 make
 ./res.out >> temp.txt
 open image.ppm
+# open ../tmp/prev.ppm

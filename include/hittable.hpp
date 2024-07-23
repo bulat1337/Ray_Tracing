@@ -16,10 +16,11 @@ struct Hit_record
 	double ray_coeff;
 	bool front_faced;
 	std::shared_ptr<Material> material;
+	double u;
+	double v;
 
 	void set_against_ray(const Ray &ray, const Vec3 &out_normal)
-	{
-		// NOTE: out_normal is assumed to have unit length
+	{	// NOTE: out_normal is assumed to have unit length
 		front_faced = dot(out_normal, ray.direction()) < 0;
 
 		sur_normal = front_faced ? out_normal : - out_normal;

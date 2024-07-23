@@ -10,11 +10,16 @@ int main()
 	Camera cam;
 	Hittables world;
 
-	auto ground_Material = std::make_shared<Lambertian>(Color(0.5, 0.5, 0.5));
-	world.add(std::make_shared<Sphere>(Point3(0,-1000,0), 1000, ground_Material));
+	auto checker = std::make_shared<Checker>(	0.32
+												, Color(0.2, 0.3, 0.1)
+												, Color(0.9, 0.9, 0.9));
 
-	for (int a = -11; a < 11; a++) {
-		for (int b = -11; b < 11; b++) {
+	world.add(std::make_shared<Sphere>(	Point3(0, -1000, 0)
+										, 1000
+										, std::make_shared<Lambertian>(checker)));
+
+	for (int a = -3; a < 3; a++) {
+		for (int b = -3; b < 3; b++) {
 			auto choose_mat = rand_double();
 			Point3 center(a + 0.9*rand_double(), 0.2, b + 0.9*rand_double());
 
