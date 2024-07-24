@@ -5,6 +5,7 @@
 
 #include "color.hpp"
 #include "vec3.hpp"
+#include "stb_image.hpp"
 
 class Texture
 {
@@ -62,6 +63,38 @@ class Checker : public Texture
 
 		return is_even ? even->value(u, v, point) : odd->value(u, v, point);
 	}
+};
+
+class Image_texture : public Texture
+{
+  public:
+	Image_texture(const char *file_name):
+		image(file_name) {}
+
+	Color value(double u, double v, const Point3 &point) const override
+	{
+		if(image.height() <= 0) return Color(0, 1, 1);
+
+		u = Interval(0, 1).clamp(u);
+
+		v = 1.0 - Interval(0, 1).clamp(v);
+
+		int i = static_cast<int>(u * image.width());
+		int j = static_cast<int>(v * image.height());
+
+		const unsigned char* pixel = image.pixel_data(i, j);
+
+		double scale = 1.0 / 255.0;
+
+		return Color(	pixel[0] * scale
+						, pixel[1] * scale
+						, pixel[2] * scale);
+	}
+
+  private:
+	External_img image;
+
+
 };
 
 

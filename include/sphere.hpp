@@ -19,6 +19,17 @@ private:
 		return center_1 + path_dir * time;
 	}
 
+	static void get_sphere_uv(	const Point3 &point
+								, double &u
+								, double &v)
+	{
+		auto theta = acos(-point.y());
+		auto phi   = atan2(-point.z(), point.x()) + pi;
+
+		u = phi / (2 * pi);
+		v = theta / pi;
+	}
+
 public:
 	Sphere(	const Point3 &set_center_1
 			, double set_radius
@@ -87,6 +98,9 @@ public:
 
 		Vec3 out_normal   = (record.hit_point - sphere_center) / radius;
 		record.set_against_ray(ray, out_normal);
+
+		get_sphere_uv(out_normal, record.u, record.v);
+
 		record.material = material;
 
 

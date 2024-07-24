@@ -22,7 +22,7 @@ FLAGS = -D _DEBUG -ggdb3 \
 
 LINK_FLAGS = -fsanitize=address,alignment,bool,bounds,enum,float-cast-overflow,float-divide-by-zero,integer-divide-by-zero,nonnull-attribute,null,return,returns-nonnull-attribute,shift,signed-integer-overflow,undefined,unreachable,vla-bound,vptr
 
-Include = -I../include/
+Include = -I../include/ -I../external/include
 
 SRS = $(wildcard $(PREF_SRS)*.cpp)
 OBJ = $(patsubst $(PREF_SRS)%.cpp, $(PREF_OBJ)%.o, $(SRS))
