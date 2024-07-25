@@ -6,6 +6,7 @@
 #include "color.hpp"
 #include "vec3.hpp"
 #include "stb_image.hpp"
+#include "perlin.hpp"
 
 class Texture
 {
@@ -97,6 +98,19 @@ class Image_texture : public Texture
 
 };
 
+class Noise : public Texture
+{
+  public:
+	Noise() = default;
+
+	Color value(double /*u*/, double /*v*/, const Point3 &point) const
+	{
+		return Color(1, 1, 1) * perlin.noise(point);
+	}
+
+  private:
+	Perlin perlin;
+};
 
 
 #endif
