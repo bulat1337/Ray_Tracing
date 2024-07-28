@@ -7,7 +7,7 @@
 
 void perlin_spheres()
 {
-	std::shared_ptr<Noise> perlin_texture = std::make_shared<Noise>();
+	std::shared_ptr<Noise> perlin_texture = std::make_shared<Noise>(4);
 
 	Point3 ground_sp_center(0, -1000, 0);
 	double ground_sp_radius = 1000;

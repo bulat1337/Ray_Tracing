@@ -63,7 +63,7 @@ class AABB
 		return true;
 	}
 
-	size_t longest_axis() const
+	int longest_axis() const
 	{
 		if(x.size() > y.size())
 		{

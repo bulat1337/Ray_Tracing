@@ -1,6 +1,8 @@
 #ifndef TEXTURE_HPP
 #define TEXTURE_HPP
 
+#include <cmath>
+
 #include <memory>
 
 #include "color.hpp"
@@ -103,13 +105,19 @@ class Noise : public Texture
   public:
 	Noise() = default;
 
-	Color value(double /*u*/, double /*v*/, const Point3 &point) const
+	Noise(double set_scale):
+		scale(set_scale) {}
+
+	Color value(double /*u*/, double /*v*/, const Point3 &point) const override
 	{
-		return Color(1, 1, 1) * perlin.noise(point);
+		return 	Color(0.5, 0.5, 0.5)
+				* (	1.0 + sin(	scale * point.z()
+								+ 10 * perlin.turbulence(point, 7))); // 7 -- magic number
 	}
 
   private:
 	Perlin perlin;
+	double scale = 1;
 };
 
 
