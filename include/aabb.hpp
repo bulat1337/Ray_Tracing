@@ -9,6 +9,9 @@
 class AABB
 {
   public:
+	static const AABB empty;
+	static const AABB universe;
+
 	Interval x;
 	Interval y;
 	Interval z;
@@ -18,13 +21,18 @@ class AABB
 	AABB(const Interval &set_x, const Interval &set_y, const Interval &set_z):
 		x(set_x)
 		, y(set_y)
-		, z(set_z) {}
+		, z(set_z)
+	{
+		pad_to_mins();
+	}
 
 	AABB(const Point3 &p_1, const Point3 &p_2)
 	{
 		x = (p_1[0] <= p_2[0]) ? Interval(p_1[0], p_2[0]) : Interval(p_2[0], p_1[0]);
 		y = (p_1[1] <= p_2[1]) ? Interval(p_1[1], p_2[1]) : Interval(p_2[1], p_1[1]);
 		z = (p_1[2] <= p_2[2]) ? Interval(p_1[2], p_2[2]) : Interval(p_2[2], p_1[2]);
+
+		pad_to_mins();
 	}
 
 	AABB(const AABB &box_1, const AABB &box_2):
@@ -73,9 +81,15 @@ class AABB
 		return y.size() > z.size() ? 1 : 2;
 	}
 
-	static const AABB empty;
-	static const AABB universe;
+  private:
+	void pad_to_mins()
+	{
+		double delta = 0.000'1;
 
+		if(x.size() < delta) x = x.expand(delta);
+		if(y.size() < delta) y = y.expand(delta);
+		if(z.size() < delta) z = z.expand(delta);
+	}
 };
 
 const AABB AABB::empty    = AABB(Interval::empty,    Interval::empty,    Interval::empty);
