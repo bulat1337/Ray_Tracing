@@ -74,7 +74,7 @@ class Image_texture : public Texture
 	Image_texture(const char *file_name):
 		image(file_name) {}
 
-	Color value(double u, double v, const Point3 &point) const override
+	Color value(double u, double v, const Point3 &/*point*/) const override
 	{
 		if(image.height() <= 0) return Color(0, 1, 1);
 

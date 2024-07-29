@@ -84,7 +84,7 @@ class AABB
   private:
 	void pad_to_mins()
 	{
-		double delta = 0.000'1;
+		double delta = 0.0001;
 
 		if(x.size() < delta) x = x.expand(delta);
 		if(y.size() < delta) y = y.expand(delta);

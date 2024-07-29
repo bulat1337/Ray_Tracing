@@ -4,6 +4,107 @@
 #include "camera.hpp"
 #include "sphere.hpp"
 #include "bvh.hpp"
+#include "planar.hpp"
+
+void triangles()
+{
+	Hittables world;
+
+	std::shared_ptr<Lambertian> triag_mat = std::make_shared<Lambertian>(Color(0.2, 0.2, 1.0));
+
+
+	world.add(std::make_shared<Triangle>(	Point3(0, 0, 0)
+											, Point3(5, 3, 0)
+											, Point3(0, 7, 0)
+											, triag_mat));
+
+	world.add(std::make_shared<Triangle>(	Point3(0, 0, 0)
+											, Point3(-5, -3, 0)
+											, Point3(0, -7, 0)
+											, triag_mat));
+
+	Camera cam;
+
+    cam.aspect_ratio = 16.0 / 9.0;
+    cam.image_width = 400;
+    cam.sampling = 25;
+    cam.diffusion_depth = 50;
+
+    cam.vertical_FOV = 80;
+    cam.lookfrom = Point3(0, 0, 13);
+    cam.lookat = Point3(0, 0, 0);
+    cam.view_up = Vec3(0, 1, 0);
+
+    cam.defocus_angle = 0;
+
+    cam.render(world);
+}
+
+void disks()
+{
+	Hittables world;
+
+	std::shared_ptr<Lambertian> disk_mat = std::make_shared<Lambertian>(Color(0.2, 0.2, 1.0));
+
+
+	world.add(std::make_shared<Disk>(	Point3(0, 0, 0)
+										, Point3(1, -1, 0)
+										, Point3(0, 1, 1)
+										, disk_mat
+										, 2));
+
+	Camera cam;
+
+    cam.aspect_ratio = 16.0 / 9.0;
+    cam.image_width = 400;
+    cam.sampling = 25;
+    cam.diffusion_depth = 50;
+
+    cam.vertical_FOV = 80;
+    cam.lookfrom = Point3(0, 0, 5);
+    cam.lookat = Point3(0, 0, 0);
+    cam.view_up = Vec3(0, 1, 0);
+
+    cam.defocus_angle = 0;
+
+    cam.render(world);
+}
+
+void quads()
+{
+    Hittables world;
+
+    // Materials
+    auto left_red    = std::make_shared<Lambertian>(Color(1.0, 0.2, 0.2));
+    auto back_green  = std::make_shared<Lambertian>(Color(0.2, 1.0, 0.2));
+    auto right_blue  = std::make_shared<Lambertian>(Color(0.2, 0.2, 1.0));
+    auto upper_orange = std::make_shared<Lambertian>(Color(1.0, 0.5, 0.0));
+    auto lower_teal  = std::make_shared<Lambertian>(Color(0.2, 0.8, 0.8));
+
+    // Quads
+    world.add(std::make_shared<Quad>(Point3(-3, -2, 5), Vec3(0, 0, -4), Vec3(0, 4, 0), left_red));
+    world.add(std::make_shared<Quad>(Point3(-2, -2, 0), Vec3(4, 0, 0), Vec3(0, 4, 0), back_green));
+    world.add(std::make_shared<Quad>(Point3(3, -2, 1), Vec3(0, 0, 4), Vec3(0, 4, 0), right_blue));
+    world.add(std::make_shared<Quad>(Point3(-2, 3, 1), Vec3(4, 0, 0), Vec3(0, 0, 4), upper_orange));
+    world.add(std::make_shared<Quad>(Point3(-2, -3, 5), Vec3(4, 0, 0), Vec3(0, 0, -4), lower_teal));
+
+    Camera cam;
+
+    cam.aspect_ratio = 1.0;
+    cam.image_width = 400;
+    cam.sampling = 25;
+    cam.diffusion_depth = 50;
+
+    cam.vertical_FOV = 80;
+    cam.lookfrom = Point3(0, 0, 9);
+    cam.lookat = Point3(0, 0, 0);
+    cam.view_up = Vec3(0, 1, 0);
+
+    cam.defocus_angle = 0;
+
+    cam.render(world);
+}
+
 
 void perlin_spheres()
 {
@@ -186,12 +287,15 @@ enum class Scene
 	, CHECKERED
 	, EARTH
 	, PERLIN
+	, QUADS
+	, DISKS
+	, TRIANGLES
 };
 
 
 int main()
 {
-	Scene scene = Scene::PERLIN;
+	Scene scene = Scene::TRIANGLES;
 
 	switch (scene)
 	{
@@ -206,6 +310,15 @@ int main()
 			break;
 		case Scene::PERLIN:
 			perlin_spheres();
+			break;
+		case Scene::QUADS:
+			quads();
+			break;
+		case Scene::DISKS:
+			disks();
+			break;
+		case Scene::TRIANGLES:
+			triangles();
 			break;
 		default:
 			std::cout << "Unknown scene\n";
