@@ -19,6 +19,7 @@ class Camera
 	size_t sampling			= 1;
 	size_t diffusion_depth	= 10;
 	double vertical_FOV     = 90;
+	Color  background;
 
 	Point3 lookfrom         = Point3(0, 0, 0);
 	Point3 lookat           = Point3(0, 0, -1);
@@ -131,27 +132,24 @@ class Camera
 
 		Hit_record record;
 
-		if(world.hit(ray, Interval(0.001, infinity), record))
-		{
-			Color attenuation;
-			Ray scattered_ray;
 
-			if(record.material->scattered(ray, record, attenuation, scattered_ray))
-			{
-				return attenuation * ray_color(scattered_ray, depth - 1, world);
-			}
+		if(!world.hit(ray, Interval(0.001, infinity), record))
+			return background;
 
-			return Color(0, 0, 0);
-		}
+		Color attenuation;
+		Ray scattered_ray;
+		Color emission_color = record.material->emitted(	record.u
+															, record.v
+															, record.hit_point);
 
+		if(!record.material->scattered(ray, record, attenuation, scattered_ray))
+			return emission_color;
 
-		Vec3 unit_dir = unit_vector(ray.direction());
+		Color scatter_color = attenuation * ray_color(	scattered_ray
+														, depth - 1
+														, world);
 
-		double coeff = 0.5 * (unit_dir.y() + 1);
-		Color start_color(1, 1, 1);
-		Color end_color(0.5, 0.7, 1.0);
-
-		return (1 - coeff) * start_color + coeff * end_color;
+		return emission_color + scatter_color;
 	}
 
 

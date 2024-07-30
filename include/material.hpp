@@ -15,6 +15,11 @@ class Material
 							, Color &attenuation
 							, Ray &scattered_ray) const = 0;
 
+	virtual Color emitted(double u, double v, const Point3 &point) const
+	{
+		return Color(0, 0, 0);
+	}
+
 
 	virtual ~Material() = default;
 };
@@ -122,6 +127,32 @@ class Dielectric : public Material
 		scattered_ray = Ray(record.hit_point, out_ray_dir, in_ray.get_time());
 
 		return true;
+	}
+};
+
+class Diffuse_light : public Material
+{
+  private:
+	std::shared_ptr<Texture> texture;
+
+  public:
+	Diffuse_light(std::shared_ptr<Texture> _texture):
+		texture(_texture) {}
+
+	Diffuse_light(const Color& emit):
+		texture(std::make_shared<Solid_color>(emit)) {}
+
+	Color emitted(double u, double v, const Point3 &point) const override
+	{
+		return texture->value(u, v, point);
+	}
+
+	bool scattered(	const Ray &in_ray
+							, const Hit_record &record
+							, Color &attenuation
+							, Ray &scattered_ray) const
+	{
+		return false;
 	}
 };
 

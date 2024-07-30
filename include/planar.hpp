@@ -12,6 +12,7 @@
 #include "aabb.hpp"
 #include "ray.hpp"
 #include "interval.hpp"
+#include "hittables.hpp"
 
 class Planar : public Hittable
 {
@@ -152,5 +153,68 @@ class Triangle : public Planar
 		return true;
 	}
 };
+
+inline std::shared_ptr<Hittables> box(	const Point3 &a
+										, const Point3 &b
+										, std::shared_ptr<Material> material)
+{
+	std::shared_ptr<Hittables> sides = std::make_shared<Hittables>();
+
+	Point3 min(	fmin(a.x(), b.x())
+				, fmin(a.y(), b.y())
+				, fmin(a.z(), b.z()));
+
+	Point3 max(	fmax(a.x(), b.x())
+				, fmax(a.y(), b.y())
+				, fmax(a.z(), b.z()));
+
+	Vec3 axis_x(max.x() - min.x(), 0, 0);
+	Vec3 axis_y(0, max.y() - min.y(), 0);
+	Vec3 axis_z(0, 0, max.z() - min.z());
+
+	sides->add(std::make_shared<Quad>(	Point3(min.x()
+										, min.y()
+										, max.z())
+										, axis_x
+										, axis_y
+										, material));  // front
+
+	sides->add(std::make_shared<Quad>(	Point3(max.x()
+										, min.y()
+										, max.z())
+										, -axis_z
+										, axis_y
+										, material)); // right
+
+	sides->add(std::make_shared<Quad>(	Point3(max.x()
+										, min.y()
+										, min.z())
+										, -axis_x
+										, axis_y
+										, material)); // back
+
+	sides->add(std::make_shared<Quad>(	Point3(min.x()
+										, min.y()
+										, min.z())
+										, axis_z
+										, axis_y
+										, material));  // left
+
+	sides->add(std::make_shared<Quad>(	Point3(min.x()
+										, max.y()
+										, max.z())
+										, axis_x
+										, -axis_z
+										, material)); // top
+
+	sides->add(std::make_shared<Quad>(	Point3(min.x()
+										, min.y()
+										, min.z())
+										, axis_x
+										, axis_z
+										, material));  // bottom
+
+	return sides;
+}
 
 #endif

@@ -6,6 +6,115 @@
 #include "bvh.hpp"
 #include "planar.hpp"
 
+void cornell_box()
+{
+    Hittables world;
+
+    auto red   = std::make_shared<Lambertian>(		Color(.65, .05, .05));
+    auto white = std::make_shared<Lambertian>(		Color(.73, .73, .73));
+    auto green = std::make_shared<Lambertian>(		Color(.12, .45, .15));
+    auto light = std::make_shared<Diffuse_light>(	Color(15, 15, 15));
+
+    world.add(std::make_shared<Quad>(	Point3(555, 0,   0)
+										, Vec3(0,   555, 0)
+										, Vec3(0,   0,   555)
+										, green));
+    world.add(std::make_shared<Quad>(	Point3(0, 0,   0)
+										, Vec3(0, 555, 0)
+										, Vec3(0, 0,   555)
+										, red));
+
+    world.add(std::make_shared<Quad>(	Point3(343,  554, 332)
+										, Vec3(-130, 0,   0)
+										, Vec3(0,    0,   -105)
+										, light));
+
+    world.add(std::make_shared<Quad>(	Point3(0,   0, 0)
+										, Vec3(555, 0, 0)
+										, Vec3(0,   0, 555)
+										, white));
+
+    world.add(std::make_shared<Quad>(	Point3(555,  555, 555)
+										, Vec3(-555, 0,   0)
+										, Vec3(0,    0,   -555)
+										, white));
+
+    world.add(std::make_shared<Quad>(	Point3(0,   0,   555)
+										, Vec3(555, 0,   0)
+										, Vec3(0,   555, 0)
+										, white));
+
+	world.add(box(	Point3(130, 0, 65)
+					, Point3(295, 265, 230)
+					, white));
+
+	world.add(box(	Point3(265, 0, 295)
+					, Point3(430, 330, 460)
+					, white));
+
+    Camera cam;
+
+    cam.aspect_ratio    = 1.0;
+    cam.image_width     = 300;
+    cam.sampling        = 25;
+    cam.diffusion_depth = 50;
+    cam.background      = Color(0,0,0);
+
+    cam.vertical_FOV    = 40;
+    cam.lookfrom        = Point3(278, 278, -800);
+    cam.lookat          = Point3(278, 278, 0);
+    cam.view_up         = Vec3(0,1,0);
+
+    cam.defocus_angle = 0;
+
+    cam.render(world);
+}
+
+
+void simple_light()
+{
+    Hittables world;
+
+    auto pertext = std::make_shared<Noise>(4);
+
+    world.add(	std::make_shared<Sphere>(Point3(0,-1000,0)
+				, 1000
+				, std::make_shared<Lambertian>(pertext)));
+
+    world.add(std::make_shared<Sphere>(	Point3(0,2,0)
+										, 2
+										, std::make_shared<Lambertian>(pertext)));
+
+    auto difflight = std::make_shared<Diffuse_light>(Color(4,4,4));
+
+	world.add(	std::make_shared<Sphere>(Point3(0, 5, 0)
+				, 1
+				, difflight));
+
+    world.add(	std::make_shared<Quad>(Point3(3,1,-2)
+				, Vec3(2,0,0)
+				, Vec3(0,2,0)
+				, difflight));
+
+    Camera cam;
+
+    cam.aspect_ratio = 16.0 / 9.0;
+    cam.image_width = 400;
+    cam.sampling = 100;
+    cam.diffusion_depth = 50;
+    cam.background = Color(0,0,0);
+
+    cam.vertical_FOV = 20;
+    cam.lookfrom = Point3(26,3,6);
+    cam.lookat = Point3(0,2,0);
+    cam.view_up = Vec3(0,1,0);
+
+    cam.defocus_angle = 0;
+
+    cam.render(world);
+}
+
+
 void triangles()
 {
 	Hittables world;
@@ -29,6 +138,7 @@ void triangles()
     cam.image_width = 400;
     cam.sampling = 25;
     cam.diffusion_depth = 50;
+	cam.background = Color(0.7, 0.8, 1.0);
 
     cam.vertical_FOV = 80;
     cam.lookfrom = Point3(0, 0, 13);
@@ -59,6 +169,7 @@ void disks()
     cam.image_width = 400;
     cam.sampling = 25;
     cam.diffusion_depth = 50;
+	cam.background = Color(0.7, 0.8, 1.0);
 
     cam.vertical_FOV = 80;
     cam.lookfrom = Point3(0, 0, 5);
@@ -94,6 +205,7 @@ void quads()
     cam.image_width = 400;
     cam.sampling = 25;
     cam.diffusion_depth = 50;
+	cam.background = Color(0.7, 0.8, 1.0);
 
     cam.vertical_FOV = 80;
     cam.lookfrom = Point3(0, 0, 9);
@@ -136,6 +248,7 @@ void perlin_spheres()
 	cam.image_width 	= 400;
 	cam.sampling 		= 100;
 	cam.diffusion_depth = 50;
+	cam.background = Color(0.7, 0.8, 1.0);
 
 	cam.vertical_FOV 	= 20;
 	cam.lookfrom 		= Point3(13, 2, 3);
@@ -159,6 +272,7 @@ void earth()
 	cam.image_width = 400;
 	cam.sampling = 25;
 	cam.diffusion_depth = 50;
+	cam.background = Color(0.7, 0.8, 1.0);
 
 	cam.vertical_FOV = 20;
 	cam.lookfrom = Point3(0, 0, 12);
@@ -229,6 +343,7 @@ void book_cover()
 	cam.image_width = 400;
 	cam.sampling = 25;
 	cam.diffusion_depth = 50;
+	cam.background = Color(0.7, 0.8, 1.0);
 
 	cam.vertical_FOV = 20;
 	cam.lookfrom = Point3(13,2,3);
@@ -270,6 +385,7 @@ void checkered_spheres()
 	cam.image_width = 400;
 	cam.sampling = 25;
 	cam.diffusion_depth = 50;
+	cam.background = Color(0.7, 0.8, 1.0);
 
 	cam.vertical_FOV = 20;
 	cam.lookfrom = Point3(13,2,3);
@@ -290,12 +406,14 @@ enum class Scene
 	, QUADS
 	, DISKS
 	, TRIANGLES
+	, SIMPLE_LIGHT
+	, CORNELL
 };
 
 
 int main()
 {
-	Scene scene = Scene::TRIANGLES;
+	Scene scene = Scene::CORNELL;
 
 	switch (scene)
 	{
@@ -319,6 +437,12 @@ int main()
 			break;
 		case Scene::TRIANGLES:
 			triangles();
+			break;
+		case Scene::SIMPLE_LIGHT:
+			simple_light();
+			break;
+		case Scene::CORNELL:
+			cornell_box();
 			break;
 		default:
 			std::cout << "Unknown scene\n";
