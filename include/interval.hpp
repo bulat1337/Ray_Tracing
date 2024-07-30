@@ -57,4 +57,14 @@ public:
 const Interval Interval::empty 		= Interval(+infinity, -infinity);
 const Interval Interval::universe 	= Interval(-infinity, +infinity);
 
+Interval operator + (const Interval &interval, double offset)
+{
+	return Interval(interval.min + offset, interval.max + offset);
+}
+
+Interval operator + (double offset, const Interval &interval)
+{
+	return interval + offset;
+}
+
 #endif

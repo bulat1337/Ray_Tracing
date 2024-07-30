@@ -44,13 +44,22 @@ void cornell_box()
 										, Vec3(0,   555, 0)
 										, white));
 
-	world.add(box(	Point3(130, 0, 65)
-					, Point3(295, 265, 230)
-					, white));
+	std::shared_ptr<Hittable> box_1 = box(	Point3(0, 0, 0)
+											, Point3(165, 330, 165)
+											, white);
 
-	world.add(box(	Point3(265, 0, 295)
-					, Point3(430, 330, 460)
-					, white));
+	box_1 = std::make_shared<Rotate_y> (box_1, 15);
+	box_1 = std::make_shared<Translate>(box_1, Vec3(265, 0, 295));
+	world.add(box_1);
+
+	std::shared_ptr<Hittable> box_2 = box(	Point3(0, 0, 0)
+											, Point3(165, 165, 165)
+											, white);
+
+	box_2 = std::make_shared<Rotate_y> (box_2, -18);
+	box_2 = std::make_shared<Translate>(box_2, Vec3(130, 0, 65));
+	world.add(box_2);
+
 
     Camera cam;
 
