@@ -15,7 +15,7 @@ class Material
 							, Color &attenuation
 							, Ray &scattered_ray) const = 0;
 
-	virtual Color emitted(double u, double v, const Point3 &point) const
+	virtual Color emitted(double /*u*/, double /*v*/, const Point3 &/*point*/) const
 	{
 		return Color(0, 0, 0);
 	}
@@ -147,12 +147,36 @@ class Diffuse_light : public Material
 		return texture->value(u, v, point);
 	}
 
+	bool scattered(	const Ray &/*in_ray*/
+							, const Hit_record &/*record*/
+							, Color &/*attenuation*/
+							, Ray &/*scattered_ray*/) const override
+	{
+		return false;
+	}
+};
+
+class Isotropic : public Material
+{
+  private:
+	std::shared_ptr<Texture> texture;
+
+  public:
+	Isotropic(const Color &albedo):
+		texture(std::make_shared<Solid_color> (albedo)) {}
+
+	Isotropic(std::shared_ptr<Texture> _texture):
+		texture(_texture) {}
+
 	bool scattered(	const Ray &in_ray
 							, const Hit_record &record
 							, Color &attenuation
-							, Ray &scattered_ray) const
+							, Ray &scattered_ray) const override
 	{
-		return false;
+		scattered_ray = Ray(record.hit_point, rand_unit_vec(), in_ray.get_time());
+		attenuation = texture->value(record.u, record.v, record.hit_point);
+
+		return true;
 	}
 };
 

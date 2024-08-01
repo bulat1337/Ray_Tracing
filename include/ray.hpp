@@ -5,11 +5,11 @@
 
 class Ray
 {
-private:
+  private:
 	Point3 orig;
 	Vec3   dir;
 	double time;
-public:
+  public:
 	Ray() = default;
 
 	Ray(const Point3 &set_orig, const Vec3 &set_dir):
