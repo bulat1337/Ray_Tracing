@@ -12,9 +12,9 @@ class Material;
 struct Hit_record
 {
 	Point3 hit_point;
-	Vec3 sur_normal;
+	Vec3   sur_normal;
 	double ray_coeff;
-	bool front_faced;
+	bool   front_faced;
 	std::shared_ptr<Material> material;
 	double u;
 	double v;
@@ -29,7 +29,7 @@ struct Hit_record
 
 class Hittable
 {
-public:
+  public:
 	virtual bool hit(	const Ray &ray
 						, Interval interval
 						, Hit_record &record) const = 0;

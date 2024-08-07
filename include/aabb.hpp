@@ -18,10 +18,10 @@ class AABB
 
 	AABB() = default;
 
-	AABB(const Interval &set_x, const Interval &set_y, const Interval &set_z):
-		x(set_x)
-		, y(set_y)
-		, z(set_z)
+	AABB(const Interval &_x, const Interval &_y, const Interval &_z):
+		x(_x)
+		, y(_y)
+		, z(_z)
 	{
 		pad_to_mins();
 	}
@@ -42,12 +42,16 @@ class AABB
 
 	Interval axis_interval(size_t id) const
 	{
-		if     (id == 0) return x;
-		else if(id == 1) return y;
-		else             return z;
+		switch(id)
+		{
+			case 0: 	return x;
+			case 1: 	return y;
+			default: 	return z;
+		}
 	}
 
-	bool hit(const Ray &ray, const Interval &ray_inter) const
+	bool hit(	const Ray &ray
+						, Interval interval) const
 	{
 		Point3 orig = ray.origin();
 		Vec3   dir  = ray.direction();
@@ -62,8 +66,8 @@ class AABB
 				std::swap(bound_min, bound_max);
 			}
 
-			double overall_min = fmax(bound_min, ray_inter.min);
-			double overall_max = fmin(bound_max, ray_inter.max);
+			double overall_min = fmax(bound_min, interval.min);
+			double overall_max = fmin(bound_max, interval.max);
 
 			if(overall_max <= overall_min) return false;
 		}

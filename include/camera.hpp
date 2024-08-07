@@ -137,7 +137,8 @@ class Camera
 			return background;
 
 		Color attenuation;
-		Ray scattered_ray;
+		Ray   scattered_ray;
+		
 		Color emission_color = record.material->emitted(	record.u
 															, record.v
 															, record.hit_point);

@@ -20,7 +20,6 @@ class Material
 		return Color(0, 0, 0);
 	}
 
-
 	virtual ~Material() = default;
 };
 

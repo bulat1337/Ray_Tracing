@@ -8,42 +8,8 @@
 #include "hittables.hpp"
 #include "aabb.hpp"
 
-
 class BVH_node : public Hittable
 {
-  private:
-	std::shared_ptr<Hittable> left;
-	std::shared_ptr<Hittable> right;
-	AABB bbox;
-
-	static bool box_comp(	std::shared_ptr<Hittable> left
-							, std::shared_ptr<Hittable> right
-							, size_t axis_id)
-	{
-		Interval left_interval  = left->bounding_box().axis_interval(axis_id);
-		Interval right_interval = right->bounding_box().axis_interval(axis_id);
-
-		return left_interval.min < right_interval.min;
-	}
-
-	static bool box_x_comp(	const std::shared_ptr<Hittable> left
-							, const std::shared_ptr<Hittable> right)
-	{
-		return box_comp(left, right, 0);
-	}
-
-	static bool box_y_comp(	const std::shared_ptr<Hittable> left
-							, const std::shared_ptr<Hittable> right)
-	{
-		return box_comp(left, right, 1);
-	}
-
-	static bool box_z_comp(	const std::shared_ptr<Hittable> left
-							, const std::shared_ptr<Hittable> right)
-	{
-		return box_comp(left, right, 2);
-	}
-
   public:
 	BVH_node(std::vector<std::shared_ptr<Hittable>> objects, size_t start, size_t end)
 	{
@@ -132,6 +98,40 @@ class BVH_node : public Hittable
 	{
 		return bbox;
 	}
+
+  private:
+	std::shared_ptr<Hittable> left;
+	std::shared_ptr<Hittable> right;
+	AABB bbox;
+
+	static bool box_comp(	std::shared_ptr<Hittable> left
+							, std::shared_ptr<Hittable> right
+							, size_t axis_id)
+	{
+		Interval left_interval  = left->bounding_box().axis_interval(axis_id);
+		Interval right_interval = right->bounding_box().axis_interval(axis_id);
+
+		return left_interval.min < right_interval.min;
+	}
+
+	static bool box_x_comp(	const std::shared_ptr<Hittable> left
+							, const std::shared_ptr<Hittable> right)
+	{
+		return box_comp(left, right, 0);
+	}
+
+	static bool box_y_comp(	const std::shared_ptr<Hittable> left
+							, const std::shared_ptr<Hittable> right)
+	{
+		return box_comp(left, right, 1);
+	}
+
+	static bool box_z_comp(	const std::shared_ptr<Hittable> left
+							, const std::shared_ptr<Hittable> right)
+	{
+		return box_comp(left, right, 2);
+	}
+
 
 };
 

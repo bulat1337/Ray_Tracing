@@ -2,10 +2,110 @@
 
 #include "material.hpp"
 #include "camera.hpp"
-#include "Sphere.hpp"
+#include "sphere.hpp"
 #include "bvh.hpp"
 #include "planar.hpp"
-#include "Constant_medium.hpp"
+#include "constant_medium.hpp"
+
+void lab()
+{
+	Hittables world;
+
+	using std::shared_ptr;
+	using std::make_shared;
+
+
+	shared_ptr<Checker> gr_sp_tex  = make_shared<Checker>(	0.32
+																	, Color(0.2, 0.3, 0.1)
+																	, Color(0.9, 0.9, 0.9));
+	shared_ptr<Material> gr_sp_mat = make_shared<Lambertian>(gr_sp_tex);
+	double gr_sp_radius = 1000;
+	Point3 gr_sp_center(0, -1000, 0);
+
+	shared_ptr<Sphere>gr_sp = make_shared<Sphere>(	gr_sp_center
+													, gr_sp_radius
+													, gr_sp_mat);
+
+	Color tester_sp_albedo(	72.0    / 255.0
+							, 150.0 / 255.0
+							, 253.0 / 255.0);
+
+	shared_ptr<Material> tester_sp_mat = make_shared<Lambertian>(tester_sp_albedo);
+
+	double tester_sp_radius = 1;
+
+	Point3 tester_sp_center(0, 1, 0);
+
+	shared_ptr<Sphere>tester_sp = make_shared<Sphere>(	tester_sp_center
+													, tester_sp_radius
+													, tester_sp_mat);
+
+
+	Color tester_box_albedo(	164.0 / 255.0
+								, 84.0 / 255.0
+								, 255.0 / 255.0);
+
+	shared_ptr<Material> tester_box_mat = make_shared<Metal>(tester_box_albedo, 0.0);
+
+	shared_ptr<Hittable> tester_box = box(	Point3(-1, 0, -1.3)
+											, Point3(1, 2, -3.3)
+											, tester_box_mat);
+
+	Point3 light_quad_1_orig(0, 3, 3);
+
+	Vec3 light_quad_1_u( 0, 1, -1);
+	Vec3 light_quad_1_v(-1, 0, -1);
+
+	Color light_quad_1_emit(	255.0 / 255.0
+							, 222.0 / 255.0
+							, 84.0  / 255.0);
+
+	shared_ptr<Material> light_quad_1_mat = make_shared<Diffuse_light>(light_quad_1_emit);
+
+	shared_ptr<Quad> light_quad_1 = make_shared<Quad>(	light_quad_1_orig
+														, light_quad_1_u
+														, light_quad_1_v
+														, light_quad_1_mat);
+
+	Point3 light_quad_2_orig(0, 3, -3);
+
+	Vec3 light_quad_2_u( 0, 1, 1);
+	Vec3 light_quad_2_v(-1, 0, 1);
+
+	Color light_quad_2_emit(	255.0 / 255.0
+								, 222.0 / 255.0
+								, 84.0  / 255.0);
+
+	shared_ptr<Material> light_quad_2_mat = make_shared<Diffuse_light>(light_quad_2_emit);
+
+	shared_ptr<Quad> light_quad_2 = make_shared<Quad>(	light_quad_2_orig
+														, light_quad_2_u
+														, light_quad_2_v
+														, light_quad_2_mat);
+
+	Camera cam;
+
+	cam.aspect_ratio    = 16.0 / 9.0;
+	cam.background      = Color(	0.0 / 255.0
+									, 0.0 / 255.0
+									, 0.0 / 255.0);
+	cam.defocus_angle   = 0;
+	cam.diffusion_depth = 50;
+	cam.image_width     = 400;
+	cam.lookat          = Point3(0, 1, 0);
+	cam.lookfrom        = Point3(4, 2, 0);
+	cam.sampling        = 50;
+	cam.vertical_FOV    = 70;
+	cam.view_up         = Vec3(0, 1, 0);
+
+	world.add(gr_sp);
+	world.add(tester_box);
+	world.add(tester_sp);
+	world.add(light_quad_1);
+	world.add(light_quad_2);
+
+	cam.render(world);
+}
 
 void final_scene(int image_width, int samples_per_pixel, int max_depth)
 {
@@ -563,12 +663,13 @@ enum class Scene
 	, CORNELL
 	, CORNELL_SMOKE
 	, FINAL_SCENE
+	, LAB
 };
 
 
 int main()
 {
-	Scene scene = Scene::FINAL_SCENE;
+	Scene scene = Scene::LAB;
 
 	switch (scene)
 	{
@@ -604,6 +705,9 @@ int main()
 			break;
 		case Scene::FINAL_SCENE:
 			final_scene(800, 1000, 40);
+			break;
+		case Scene::LAB:
+			lab();
 			break;
 		default:
 			std::cout << "Unknown scene\n";
