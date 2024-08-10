@@ -1,0 +1,43 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/ray_tracing.dir/src/aabb.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/aabb.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/bvh.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/bvh.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/camera.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/camera.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/color.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/color.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/constant_medium.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/constant_medium.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/hittable.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/hittable.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/hittables.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/hittables.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/image_proc.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/image_proc.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/interval.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/interval.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/material.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/material.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/perlin.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/perlin.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/planar.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/planar.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/ray.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/ray.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/sphere.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/sphere.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/texture.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/texture.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/utils.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/utils.cpp.o.d"
+  "CMakeFiles/ray_tracing.dir/src/vec3.cpp.o"
+  "CMakeFiles/ray_tracing.dir/src/vec3.cpp.o.d"
+  "libray_tracing.a"
+  "libray_tracing.pdb"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/ray_tracing.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
