@@ -1,4 +1,4 @@
-// #include <iostream>
+#include <iostream>
 
 #include "ray_tracing.h"
 
@@ -9,6 +9,7 @@ void lab()
 	using std::shared_ptr;
 	using std::make_shared;
 
+// --------------------------~ Ground ~----------------------------------------------
 
 	shared_ptr<Checker> gr_sp_tex  = make_shared<Checker>(	0.32
 																	, Color(0.2, 0.3, 0.1)
@@ -20,6 +21,10 @@ void lab()
 	shared_ptr<Sphere>gr_sp = make_shared<Sphere>(	gr_sp_center
 													, gr_sp_radius
 													, gr_sp_mat);
+
+// ----------—----------—----------—----------—----------—----------—----------—---
+
+// --------------------------~ Sphere ~----------------------------------------------
 
 	Color tester_sp_albedo(	72.0    / 255.0
 							, 150.0 / 255.0
@@ -35,6 +40,49 @@ void lab()
 													, tester_sp_radius
 													, tester_sp_mat);
 
+// ----------—----------—----------—----------—----------—----------—----------—---
+
+// --------------------------~ Sphere_2 ~----------------------------------------------
+
+	Color tester_sp_2_albedo(	230.0    / 255.0
+								, 100.0 / 255.0
+								, 230.0 / 255.0);
+
+	shared_ptr<Material> tester_sp_2_mat = make_shared<Lambertian>(tester_sp_2_albedo);
+
+	double tester_sp_2_radius = 1;
+
+	Point3 tester_sp_2_center(2, 1, 1.5);
+
+	shared_ptr<Sphere>tester_sp_2 = make_shared<Sphere>(	tester_sp_2_center
+													, tester_sp_2_radius
+													, tester_sp_2_mat);
+
+// ----------—----------—----------—----------—----------—----------—----------—---
+
+// --------------------------~ Wall ~----------------------------------------------
+
+// 	Color wall_albedo(	40.0    / 255.0
+// 							, 40.0 / 255.0
+// 							, 40.0 / 255.0);
+//
+// 	shared_ptr<Material> wall_mat = make_shared<Lambertian>(wall_albedo);
+//
+// 	Point3 wall_orig(-3, 0, 5);
+//
+// 	Vec3 wall_u( 0, 0, -10);
+// 	Vec3 wall_v( 0, 10,   0);
+//
+// 	shared_ptr<Quad> wall = make_shared<Quad>(	wall_orig
+// 												, wall_u
+// 												, wall_v
+// 												, wall_mat);
+
+// --------------------------------------------------------------------------------
+
+
+
+// --------------------------~ Box ~----------------------------------------------
 
 	Color tester_box_albedo(	164.0 / 255.0
 								, 84.0 / 255.0
@@ -42,62 +90,60 @@ void lab()
 
 	shared_ptr<Material> tester_box_mat = make_shared<Metal>(tester_box_albedo, 0.0);
 
-	shared_ptr<Hittable> tester_box = box(	Point3(-1, 0, -1.3)
-											, Point3(1, 2, -3.3)
+	Point3 box_corner(-5, 0, -2);
+	Point3 offset_vec(-2, 2, -2);
+
+	shared_ptr<Hittable> tester_box = box(	box_corner
+											, box_corner + offset_vec
 											, tester_box_mat);
 
-	Point3 light_quad_1_orig(0, 3, 3);
+// --------------------------------------------------------------------------------
 
-	Vec3 light_quad_1_u( 0, 1, -1);
-	Vec3 light_quad_1_v(-1, 0, -1);
+// --------------------------~ Light ~----------------------------------------------
 
-	Color light_quad_1_emit(	255.0 / 255.0
+	Point3 light_quad_orig(1.75, 1.75, 1.75);
+
+	Vec3 light_quad_u(-1, 1, -1);
+	Vec3 light_quad_v( 1, 0, -1);
+
+
+
+	Color light_quad_emit(	255.0 / 255.0
 							, 222.0 / 255.0
 							, 84.0  / 255.0);
 
-	shared_ptr<Material> light_quad_1_mat = make_shared<Diffuse_light>(light_quad_1_emit);
+	shared_ptr<Material> light_quad_mat = make_shared<Diffuse_light>(light_quad_emit);
 
-	shared_ptr<Quad> light_quad_1 = make_shared<Quad>(	light_quad_1_orig
-														, light_quad_1_u
-														, light_quad_1_v
-														, light_quad_1_mat);
+	shared_ptr<Quad> light_quad = make_shared<Quad>(	light_quad_orig
+														, light_quad_u
+														, light_quad_v
+														, light_quad_mat);
 
-	Point3 light_quad_2_orig(0, 3, -3);
+// --------------------------~ Camera ~----------------------------------------------
 
-	Vec3 light_quad_2_u( 0, 1, 1);
-	Vec3 light_quad_2_v(-1, 0, 1);
-
-	Color light_quad_2_emit(	255.0 / 255.0
-								, 222.0 / 255.0
-								, 84.0  / 255.0);
-
-	shared_ptr<Material> light_quad_2_mat = make_shared<Diffuse_light>(light_quad_2_emit);
-
-	shared_ptr<Quad> light_quad_2 = make_shared<Quad>(	light_quad_2_orig
-														, light_quad_2_u
-														, light_quad_2_v
-														, light_quad_2_mat);
 
 	Camera cam;
 
 	cam.aspect_ratio    = 16.0 / 9.0;
-	cam.background      = Color(	0.0 / 255.0
-									, 0.0 / 255.0
-									, 0.0 / 255.0);
+	cam.background      = Color(	218.0 / 255.0
+									, 255.0 / 255.0
+									, 253.0 / 255.0);
 	cam.defocus_angle   = 0;
+	cam.focus_dist      = 5;
 	cam.diffusion_depth = 50;
-	cam.image_width     = 400;
+	cam.image_width     = 1000;
 	cam.lookat          = Point3(0, 1, 0);
-	cam.lookfrom        = Point3(4, 2, 0);
-	cam.sampling        = 50;
-	cam.vertical_FOV    = 70;
+	cam.lookfrom        = Point3(5, 1, 0);
+	cam.sampling        = 100;
+	cam.vertical_FOV    = 40;
 	cam.view_up         = Vec3(0, 1, 0);
 
 	world.add(gr_sp);
 	world.add(tester_box);
 	world.add(tester_sp);
-	world.add(light_quad_1);
-	world.add(light_quad_2);
+	world.add(tester_sp_2);
+	// world.add(light_quad);
+	// world.add(wall);
 
 	cam.render(world);
 }
@@ -289,7 +335,7 @@ void cornell_box()
 
 	box_1 = std::make_shared<Rotate_y> (box_1, 15);
 	box_1 = std::make_shared<Translate>(box_1, Vec3(265, 0, 295));
-	world.add(box_1);
+	// world.add(box_1);
 
 	std::shared_ptr<Hittable> box_2 = box(	Point3(0, 0, 0)
 											, Point3(165, 165, 165)
@@ -297,15 +343,15 @@ void cornell_box()
 
 	box_2 = std::make_shared<Rotate_y> (box_2, -18);
 	box_2 = std::make_shared<Translate>(box_2, Vec3(130, 0, 65));
-	world.add(box_2);
+	// world.add(box_2);
 
 
     Camera cam;
 
     cam.aspect_ratio    = 1.0;
-    cam.image_width     = 300;
-    cam.sampling        = 25;
-    cam.diffusion_depth = 50;
+    cam.image_width     = 500;
+    cam.sampling        = 500;
+    cam.diffusion_depth = 2;
     cam.background      = Color(0,0,0);
 
     cam.vertical_FOV    = 40;
