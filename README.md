@@ -16,17 +16,25 @@ When the engine renders a pixel, it doesn't rely on just one ray to sample the c
 
 Users have control over the number of rays, or samples, per pixel via cameras sampling parameter. By increasing the number of samples, the final image becomes more detailed, though this also increases the computational load. This trade-off allows users to balance between rendering time and image quality based on their specific needs.
 
-![sampling_10.png](assets/oversampling/hr_light_sampling_10__31_0.ppm)
+#### Demonstration
+<p align="center">
+  <img src="assets/oversampling/hr_light_sampling_10__31_0.jpg" alt="Oversamling: 10">
+  <br>
+  <em>Oversamling: 10 (Render time: 31s)</em>
+</p>
 
-*oversamling 10*
+<p align="center">
+  <img src="assets/oversampling/hr_light_sampling_100__298_9s.jpg" alt="Oversamling: 100">
+  <br>
+  <em>Oversamling: 100 (Render time: 298.9s)</em>
+</p>
 
-![sampling_10.png](assets/oversampling/hr_light_sampling_100__298_9s.ppm)
+<p align="center">
+  <img src="assets/oversampling/hr_light_sampling_1000__2976_2s.jpg" alt="Oversamling: 1000">
+  <br>
+  <em>Oversamling: 1000 (Render time: 2976.2s)</em>
+</p>
 
-*oversamling 100*
-
-![sampling_10.png](assets/oversampling/hr_light_sampling_1000__2976_2s.ppm)
-
-*oversamling 1000*
 
 ### Diffusion Depth
 Сontrols the maximum number of times a ray can bounce off objects in the scene, affecting how light and color are calculated during rendering. This parameter prevents infinite loops in complex environments by limiting the number of interactions a ray can have before it is terminated.
@@ -40,6 +48,26 @@ Users have control over the number of rays, or samples, per pixel via cameras sa
 
 This feature allows users to balance rendering quality and performance: higher diffusion depths capture more detailed lighting effects, while lower depths reduce computation time.
 
+#### Demonstration
+
+<p align="center">
+  <img src="assets/diffusion_depth/cornell_box_depth-2_time-1164_0s.jpg" alt="Diffusion depth 2">
+  <br>
+  <em>Diffusion depth: 2 (Render time: 1164s)</em>
+</p>
+
+<p align="center">
+  <img src="assets/diffusion_depth/cornell_box_depth-5_time-3192_0s.jpg" alt="Diffusion depth 5">
+  <br>
+  <em>Diffusion depth: 5 (Render time: 3192s)</em>
+</p>
+
+<p align="center">
+  <img src="assets/diffusion_depth/cornell_box_depth-50_time-3256_3s.jpg" alt="Diffusion depth 50">
+  <br>
+  <em>Diffusion depth: 50 (Render time: 3256s)</em>
+</p>
+
 ### Defocuse Blur
 
 Simulates a depth of field effect by introducing variability in the origin of rays cast from the camera. Instead of originating from a single point, rays are generated from random points within a disk surrounding the camera. This simulates the effect of a camera lens with a specific aperture size, where the size of the disk is controlled by parameters like `defocus_angle` and `focus_dist`.
@@ -49,6 +77,20 @@ Simulates a depth of field effect by introducing variability in the origin of ra
 - Rays are cast from points randomly sampled within a disk centered around the camera. The size of this disk, which defines how much the rays are spread, is determined by the `defocus_angle` and `focus_dist` parameters.
 - A larger `defocus_angle` or closer `focus_dist` increases the size of the disk, resulting in a more pronounced blur effect, especially for objects not at the focal distance.
 - The effect is akin to what you see in photography when objects outside the depth of field appear blurred, while those at the focal plane remain sharp.
+
+#### Demonstration
+
+<p align="center">
+  	<img src="assets/defocus_blur/db_off.jpg" alt="db off">
+  	<br>
+  	<em>Fefocus blur off</em>
+</p>
+
+<p align="center">
+  	<img src="assets/defocus_blur/db_on.jpg" alt="db on">
+  	<br>
+  	<em>Fefocus blur on</em>
+</p>
 
 ### Motion Blur
 
