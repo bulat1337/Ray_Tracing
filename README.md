@@ -16,6 +16,18 @@ When the engine renders a pixel, it doesn't rely on just one ray to sample the c
 
 Users have control over the number of rays, or samples, per pixel via cameras sampling parameter. By increasing the number of samples, the final image becomes more detailed, though this also increases the computational load. This trade-off allows users to balance between rendering time and image quality based on their specific needs.
 
+![sampling_10.png](assets/oversampling/hr_light_sampling_10__31_0.ppm)
+
+*oversamling 10*
+
+![sampling_10.png](assets/oversampling/hr_light_sampling_100__298_9s.ppm)
+
+*oversamling 100*
+
+![sampling_10.png](assets/oversampling/hr_light_sampling_1000__2976_2s.ppm)
+
+*oversamling 1000*
+
 ### Diffusion Depth
 Сontrols the maximum number of times a ray can bounce off objects in the scene, affecting how light and color are calculated during rendering. This parameter prevents infinite loops in complex environments by limiting the number of interactions a ray can have before it is terminated.
 
@@ -162,8 +174,9 @@ If you encounter permission issues, you can modify the permissions of the `lan_s
 chmod +rwx build_script
 ```
 ### If you want to implement ray tracing in your project:
-1) Navigate to the `build` folder:
+1) Create `build` folder then proceed to navigate into it.:
 ```
+mkdir build
 cd build
 ```
 
@@ -172,13 +185,14 @@ cd build
 cmake ..
 make
 ```
-3) Include the header:
+3) Include the header in the file where you intend to use the ray tracer:
 ```
 #include "ray_tracing.h"
 ```
 4) Link `libray_tracing.a`
 
 If you are building your project using CMake, simply use `add_subdirectory` to include and build the ray tracer recursively.
+
 ## System specs
 **CPU**: Apple M1
 **RAM**: 8 GB
