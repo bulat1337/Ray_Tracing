@@ -11,9 +11,14 @@ void lab()
 
 // --------------------------~ Ground ~----------------------------------------------
 
-	shared_ptr<Checker> gr_sp_tex  = make_shared<Checker>(	0.32
-																	, Color(0.2, 0.3, 0.1)
-																	, Color(0.9, 0.9, 0.9));
+	auto gr_sp_tex  = std::make_shared<Checker>(	0.6
+													, Color(	255.0 / 255.0
+																, 247.0 / 255.0
+																, 188.0 / 255.0)
+													, Color(	255.0 / 255.0
+																, 102.0 / 255.0
+																, 178.0 / 255.0));
+
 	shared_ptr<Material> gr_sp_mat = make_shared<Lambertian>(gr_sp_tex);
 	double gr_sp_radius = 1000;
 	Point3 gr_sp_center(0, -1000, 0);
@@ -26,39 +31,68 @@ void lab()
 
 // --------------------------~ Sphere ~----------------------------------------------
 
-	Color tester_sp_albedo(	72.0    / 255.0
-							, 150.0 / 255.0
-							, 253.0 / 255.0);
-
-	shared_ptr<Material> tester_sp_mat = make_shared<Lambertian>(tester_sp_albedo);
-
-	double tester_sp_radius = 1;
-
-	Point3 tester_sp_center(0, 1, 0);
-
-	shared_ptr<Sphere>tester_sp = make_shared<Sphere>(	tester_sp_center
-													, tester_sp_radius
-													, tester_sp_mat);
+// 	auto tester_sp_tex  = std::make_shared<Image_texture>("mercury.jpg");
+//
+// 	shared_ptr<Material> tester_sp_mat = make_shared<Lambertian>(tester_sp_tex);
+//
+// 	double tester_sp_radius = 1;
+//
+// 	Point3 tester_sp_center_begin(0, 1, 0);
+//
+// 	shared_ptr<Sphere>tester_sp = make_shared<Sphere>(	tester_sp_center_begin
+// 														, tester_sp_radius
+// 														, tester_sp_mat);
 
 // ----------—----------—----------—----------—----------—----------—----------—---
 
-// --------------------------~ Sphere_2 ~----------------------------------------------
+// --------------------------~ Triangle ~----------------------------------------------
 
-	Color tester_sp_2_albedo(	230.0    / 255.0
-								, 100.0 / 255.0
-								, 230.0 / 255.0);
 
-	shared_ptr<Material> tester_sp_2_mat = make_shared<Lambertian>(tester_sp_2_albedo);
+Color triangle_albedo(	24.0 / 255.0
+					, 200.0 / 255.0
+					, 180.4 / 255.0);
 
-	double tester_sp_2_radius = 1;
+auto triangle_mat = std::make_shared<Lambertian>(triangle_albedo);
 
-	Point3 tester_sp_2_center(2, 1, 1.5);
+auto triangle = std::make_shared<Triangle>(	Point3(0.0, 0.1, 1.5)
+									, Point3(0.0, 2.0, 1.0)
+									, Point3(0.0, 0.0, 2.0)
+									, triangle_mat);
 
-	shared_ptr<Sphere>tester_sp_2 = make_shared<Sphere>(	tester_sp_2_center
-													, tester_sp_2_radius
-													, tester_sp_2_mat);
+// --------------------------------------------------------------------------------
 
-// ----------—----------—----------—----------—----------—----------—----------—---
+// --------------------------~ Disk ~----------------------------------------------
+
+
+Color disk_albedo(	24.0 / 255.0
+					, 100.0 / 255.0
+					, 240.4 / 255.0);
+
+auto disk_mat = std::make_shared<Lambertian>(disk_albedo);
+
+auto disk = std::make_shared<Disk>(	Point3(0.0, 1.1, 0.0)
+									, Point3(0.0, 0.0, 1.0)
+									, Point3(0.0, 1.0, 0.0)
+									, disk_mat
+									, 1.0);
+
+// --------------------------------------------------------------------------------
+
+// --------------------------~ Quad ~----------------------------------------------
+
+
+Color quad_albedo(	240.0 / 255.0
+					, 200.0 / 255.0
+					, 80.4 / 255.0);
+
+auto quad_mat = std::make_shared<Lambertian>(quad_albedo);
+
+auto quad = std::make_shared<Quad>(	Point3(0.0, 0.1, -1.5)
+									, Point3(0.0, 0.0, -2.0)
+									, Point3(0.0, 2.0, 0.0)
+									, quad_mat);
+
+// --------------------------------------------------------------------------------
 
 // --------------------------~ Wall ~----------------------------------------------
 
@@ -84,40 +118,40 @@ void lab()
 
 // --------------------------~ Box ~----------------------------------------------
 
-	Color tester_box_albedo(	164.0 / 255.0
-								, 84.0 / 255.0
-								, 255.0 / 255.0);
-
-	shared_ptr<Material> tester_box_mat = make_shared<Metal>(tester_box_albedo, 0.0);
-
-	Point3 box_corner(-5, 0, -2);
-	Point3 offset_vec(-2, 2, -2);
-
-	shared_ptr<Hittable> tester_box = box(	box_corner
-											, box_corner + offset_vec
-											, tester_box_mat);
+// 	Color tester_box_albedo(	164.0 / 255.0
+// 								, 84.0 / 255.0
+// 								, 255.0 / 255.0);
+//
+// 	shared_ptr<Material> tester_box_mat = make_shared<Metal>(tester_box_albedo, 0.0);
+//
+// 	Point3 box_corner(1.0, 0.0, -2.0);
+// 	Point3 offset_vec(-2, 2, -2);
+//
+// 	shared_ptr<Hittable> tester_box = box(	box_corner
+// 											, box_corner + offset_vec
+// 											, tester_box_mat);
 
 // --------------------------------------------------------------------------------
 
 // --------------------------~ Light ~----------------------------------------------
 
-	Point3 light_quad_orig(1.75, 1.75, 1.75);
-
-	Vec3 light_quad_u(-1, 1, -1);
-	Vec3 light_quad_v( 1, 0, -1);
-
-
-
-	Color light_quad_emit(	255.0 / 255.0
-							, 222.0 / 255.0
-							, 84.0  / 255.0);
-
-	shared_ptr<Material> light_quad_mat = make_shared<Diffuse_light>(light_quad_emit);
-
-	shared_ptr<Quad> light_quad = make_shared<Quad>(	light_quad_orig
-														, light_quad_u
-														, light_quad_v
-														, light_quad_mat);
+// 	Point3 light_quad_orig(1.75, 1.75, 1.75);
+//
+// 	Vec3 light_quad_u(-1, 1, -1);
+// 	Vec3 light_quad_v( 1, 0, -1);
+//
+//
+//
+// 	Color light_quad_emit(	255.0 / 255.0
+// 							, 222.0 / 255.0
+// 							, 84.0  / 255.0);
+//
+// 	shared_ptr<Material> light_quad_mat = make_shared<Diffuse_light>(light_quad_emit);
+//
+// 	shared_ptr<Quad> light_quad = make_shared<Quad>(	light_quad_orig
+// 														, light_quad_u
+// 														, light_quad_v
+// 														, light_quad_mat);
 
 // --------------------------~ Camera ~----------------------------------------------
 
@@ -125,25 +159,28 @@ void lab()
 	Camera cam;
 
 	cam.aspect_ratio    = 16.0 / 9.0;
-	cam.background      = Color(	218.0 / 255.0
-									, 255.0 / 255.0
-									, 253.0 / 255.0);
+	cam.background      = Color(	186.0 / 255.0
+									, 226.0 / 255.0
+									, 255.0 / 255.0);
 	cam.defocus_angle   = 0;
 	cam.focus_dist      = 5;
 	cam.diffusion_depth = 50;
 	cam.image_width     = 1000;
-	cam.lookat          = Point3(0, 1, 0);
-	cam.lookfrom        = Point3(5, 1, 0);
-	cam.sampling        = 100;
-	cam.vertical_FOV    = 40;
+	cam.lookat          = Point3(0.0, 1.0, 0.0);
+	cam.lookfrom        = Point3(5.0, 2.0, 0.0);
+	// cam.lookfrom        = Point3(5.0, 3.5, -3.0);
+	cam.sampling        = 1000;
+	cam.vertical_FOV    = 55;
 	cam.view_up         = Vec3(0, 1, 0);
 
 	world.add(gr_sp);
-	world.add(tester_box);
-	world.add(tester_sp);
-	world.add(tester_sp_2);
+	// world.add(tester_box);
+	// world.add(tester_sp);
 	// world.add(light_quad);
 	// world.add(wall);
+	world.add(triangle);
+	world.add(disk);
+	world.add(quad);
 
 	cam.render(world);
 }
@@ -275,8 +312,8 @@ void cornell_smoke()
     Camera cam;
 
     cam.aspect_ratio = 1.0;
-    cam.image_width = 200;
-    cam.sampling = 25;
+    cam.image_width = 500;
+    cam.sampling = 1000;
     cam.diffusion_depth = 50;
     cam.background = Color(0,0,0);
 
@@ -592,10 +629,10 @@ void book_cover()
 										, 1000
 										, std::make_shared<Lambertian>(checker)));
 
-	for (int a = -3; a < 3; a++) {
-		for (int b = -3; b < 3; b++) {
+	for (int a = -11; a < 11; a++) {
+		for (int b = -11; b < 11; b++) {
 			auto choose_mat = rand_double();
-			Point3 center(a + 0.9*rand_double(), 0.2, b + 0.9*rand_double());
+			Point3 center(a + 0.9 * rand_double(), 0.2, b + 0.9 * rand_double());
 
 			if ((center - Point3(4, 0.2, 0)).length() > 0.9) {
 				std::shared_ptr<Material> Sphere_Material;
@@ -631,11 +668,11 @@ void book_cover()
 	auto Material3 = std::make_shared<Metal>(Color(0.7, 0.6, 0.5), 0.0);
 	world.add(std::make_shared<Sphere>(Point3(4, 1, 0), 1.0, Material3));
 
-	world = Hittables(std::make_shared<BVH_node>(world));
+	// world = Hittables(std::make_shared<BVH_node>(world)); // BVH
 
 	cam.aspect_ratio = 16.0 / 9.0;
 	cam.image_width = 400;
-	cam.sampling = 25;
+	cam.sampling = 50;
 	cam.diffusion_depth = 50;
 	cam.background = Color(0.7, 0.8, 1.0);
 

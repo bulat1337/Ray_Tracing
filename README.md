@@ -107,6 +107,14 @@ In the `Sphere` class, a moving sphere is initialized with `start_center` an
 
 This method captures the natural blur seen when objects move quickly relative to the camera's shutter speed, enhancing the realism of fast-moving objects in the rendered scene.
 
+#### Demostration
+
+<p align="center">
+  	<img src="assets/motion_blur/motion_blur_time-4075s.jpg" alt="bouncing spheres">
+  	<br>
+  	<em>Bouncing spheres</em>
+</p>
+
 ### BVH Optimization
 An optimization technique used to accelerate ray tracing by organizing objects into a tree structure. The key idea is to enclose groups of objects within bounding volumes, allowing for efficient ray intersection tests. Instead of checking every object in the scene, rays are first tested against larger bounding volumes, and only if a ray intersects a bounding volume does it then test against the individual objects inside. This dramatically reduces the number of intersection tests, making rendering faster, especially in complex scenes.
 
@@ -129,11 +137,18 @@ Critical components in a ray tracing engine that define the appearance and behav
 1) **Solid Color**: The simplest texture type, where the entire surface is a uniform color.
 	The `Solid_color` class stores a single color (`albedo`) and returns this color for any point on the surface.
 2) **Checker Texture**: A procedural texture that creates a checkerboard pattern on the surface.
-	The `Checker` class alternates between two textures (or colors) based on the surface coordinates.
+	The `Checker` class alternates between two textures (or colors) based on the surface coordinates.ı
 3) **Image Texture**: Uses an external image file to map colors onto the surface.
 	The `Image_texture` class maps the (u, v) coordinates on the surface to pixel coordinates in the image, returning the corresponding color.
 4) **Perlin Noise**: A procedural texture that generates a pseudo-random pattern, often used to simulate natural textures like marble or clouds.
 	The `Noise` class generates a color pattern based on a mathematical function applied to the surface coordinates.
+
+<p align="center">
+  	<img src="assets/textures/textures_time-6707_5.jpg">
+  	<br>
+  	<em>Textures</em>
+</p>
+
 #### Materials
 1) **Lambertian**: Represents a surface that scatters light according to Lambert's cosine law, creating a matte appearance.
 	The `Lambertian` class uses a texture to determine the surface color and scatters the incoming ray.
@@ -141,10 +156,14 @@ Critical components in a ray tracing engine that define the appearance and behav
 	The `Metal` class reflects the incoming ray around the surface normal and applies a fuzz factor to scatter the reflection slightly.
 3) **Dielectric**: Represents transparent materials like glass or water, capable of refracting rays according to Snell's law.
 	The `Dielectric` class calculates whether the ray is reflected or refracted based on the angle of incidence and the material’s refractive index.
-4) **Dielectric**: Represents transparent materials like glass or water, capable of refracting rays according to Snell's law.
-	The `Dielectric` class calculates whether the ray is reflected or refracted based on the angle of incidence and the material’s refractive index.
-5) **Isotropic**: Represents materials that scatter light uniformly in all directions, used for simulating participating media like fog or smoke.
+4) **Isotropic**: Represents materials that scatter light uniformly in all directions, used for simulating participating media like fog or smoke.
 	The `Isotropic` class scatters rays in a random direction and uses a texture for the color attenuation.
+
+<p align="center">
+  	<img src="assets/materials/materials_time-3888_5s_1.jpg">
+  	<br>
+  	<em>Materials</em>
+</p>
 
 ### Instances
 
@@ -163,6 +182,7 @@ The implementation involves two key classes: `Rotate_y` and `Translate`.
 - **`Translate`**: Manages translating an object by a given offset. It adjusts the object's bounding box and modifies ray interactions to account for the object's new position in space.
 
 These classes allow for flexible manipulation of objects within a ray-traced scene, enabling complex and dynamic scene composition without directly altering the original object geometry.
+
 ### Planar Objects
 
 Planar objects represent 2D geometric shapes like quadrilaterals, triangles, and disks, which are defined in a 3D space. These shapes are useful for creating flat surfaces or specific shapes within a 3D scene.
@@ -176,6 +196,13 @@ Quadrilaterals are defined by two vectors that form the sides of the shape. Disk
 **Code Implementation**:
 
 The implementation begins with the `Planar` class, which sets up the basic structure for a planar object, including calculating its normal and setting its bounding box. Specific shapes like quadrilaterals, disks, and triangles extend from this base class, each with its own method for checking if a hit point lies within the boundaries of the shape.
+
+<p align="center">
+  	<img src="assets/planar/plamar_time-3807_3.jpg">
+  	<br>
+  	<em>Planar objects</em>
+</p>
+
 ## Installation
 
 **Clone** the repository using the following command in a directory of your choice:
@@ -237,7 +264,10 @@ If you are building your project using CMake, simply use `add_subdirectory` to
 
 ## System specs
 **CPU**: Apple M1
+
 **RAM**: 8 GB
+
 **OS**: MacOS 14.6
+
 **Compiler**: Apple clang version 14.0.3
 

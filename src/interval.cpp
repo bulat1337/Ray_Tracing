@@ -38,7 +38,7 @@ double Interval::clamp(double num) const
 
 Interval Interval::expand(double delta) const
 {
-	return Interval(min - delta / 2, max + delta + 2);
+	return Interval(min - delta / 2, max + delta / 2);
 }
 
 const Interval Interval::empty 		= Interval(+infinity, -infinity);

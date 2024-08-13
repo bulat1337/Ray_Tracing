@@ -91,8 +91,8 @@ AABB BVH_node::bounding_box() const
 }
 
 bool BVH_node::box_comp(	std::shared_ptr<Hittable> left
-						, std::shared_ptr<Hittable> right
-						, size_t axis_id)
+							, std::shared_ptr<Hittable> right
+							, size_t axis_id)
 {
 	Interval left_interval  = left->bounding_box().axis_interval(axis_id);
 	Interval right_interval = right->bounding_box().axis_interval(axis_id);

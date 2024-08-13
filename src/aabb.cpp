@@ -30,14 +30,14 @@ Interval AABB::axis_interval(size_t id) const
 {
 	switch(id)
 	{
-		case 0: 	return x;
-		case 1: 	return y;
-		default: 	return z;
+		case 0:  return x;
+		case 1:  return y;
+		default: return z;
 	}
 }
 
 bool AABB::hit(	const Ray &ray
-					, Interval interval) const
+				, Interval interval) const
 {
 	Point3 orig = ray.origin();
 	Vec3   dir  = ray.direction();

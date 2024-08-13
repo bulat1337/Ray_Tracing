@@ -12,7 +12,7 @@ add_library(ray_tracing STATIC ${SRC_FILES})
 target_include_directories(ray_tracing PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/external/include>
-    $<INSTALL_INTERFACE:include>
+    $<INSTALL_INTERFACE:include>rk
     $<INSTALL_INTERFACE:external/include>
 )
 
