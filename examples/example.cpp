@@ -26,6 +26,7 @@ void lab()
 	shared_ptr<Sphere>gr_sp = make_shared<Sphere>(	gr_sp_center
 													, gr_sp_radius
 													, gr_sp_mat);
+	world.add(gr_sp);
 
 // ----------—----------—----------—----------—----------—----------—----------—---
 
@@ -49,15 +50,17 @@ void lab()
 
 
 Color triangle_albedo(	24.0 / 255.0
-					, 200.0 / 255.0
-					, 180.4 / 255.0);
+						, 200.0 / 255.0
+						, 180.4 / 255.0);
 
 auto triangle_mat = std::make_shared<Lambertian>(triangle_albedo);
 
 auto triangle = std::make_shared<Triangle>(	Point3(0.0, 0.1, 1.5)
-									, Point3(0.0, 2.0, 1.0)
-									, Point3(0.0, 0.0, 2.0)
-									, triangle_mat);
+											, Point3(0.0, 2.0, 1.0)
+											, Point3(0.0, 0.0, 2.0)
+											, triangle_mat);
+
+world.add(triangle);
 
 // --------------------------------------------------------------------------------
 
@@ -76,6 +79,8 @@ auto disk = std::make_shared<Disk>(	Point3(0.0, 1.1, 0.0)
 									, disk_mat
 									, 1.0);
 
+world.add(disk);
+
 // --------------------------------------------------------------------------------
 
 // --------------------------~ Quad ~----------------------------------------------
@@ -92,6 +97,7 @@ auto quad = std::make_shared<Quad>(	Point3(0.0, 0.1, -1.5)
 									, Point3(0.0, 2.0, 0.0)
 									, quad_mat);
 
+world.add(quad);
 // --------------------------------------------------------------------------------
 
 // --------------------------~ Wall ~----------------------------------------------
@@ -127,7 +133,7 @@ auto quad = std::make_shared<Quad>(	Point3(0.0, 0.1, -1.5)
 // 	Point3 box_corner(1.0, 0.0, -2.0);
 // 	Point3 offset_vec(-2, 2, -2);
 //
-// 	shared_ptr<Hittable> tester_box = box(	box_corner
+// 	shared_ptr<Hittable> tester_box = create_box(	box_corner
 // 											, box_corner + offset_vec
 // 											, tester_box_mat);
 
@@ -173,14 +179,6 @@ auto quad = std::make_shared<Quad>(	Point3(0.0, 0.1, -1.5)
 	cam.vertical_FOV    = 55;
 	cam.view_up         = Vec3(0, 1, 0);
 
-	world.add(gr_sp);
-	// world.add(tester_box);
-	// world.add(tester_sp);
-	// world.add(light_quad);
-	// world.add(wall);
-	world.add(triangle);
-	world.add(disk);
-	world.add(quad);
 
 	cam.render(world);
 }
@@ -204,7 +202,7 @@ void final_scene(int image_width, int samples_per_pixel, int max_depth)
             auto y1 = rand_double(1, 101);
             auto z1 = z0 + w;
 
-            boxes1.add(box(Point3(x0, y0, z0), Point3(x1, y1, z1), ground));
+            boxes1.add(create_box(Point3(x0, y0, z0), Point3(x1, y1, z1), ground));
         }
     }
 
@@ -298,11 +296,11 @@ void cornell_smoke()
     world.add(std::make_shared<Quad>(Point3(0,0,0), Vec3(555,0,0), Vec3(0,0,555), white));
     world.add(std::make_shared<Quad>(Point3(0,0,555), Vec3(555,0,0), Vec3(0,555,0), white));
 
-    std::shared_ptr<Hittable> box1 = box(Point3(0,0,0), Point3(165,330,165), white);
+    std::shared_ptr<Hittable> box1 = create_box(Point3(0,0,0), Point3(165,330,165), white);
     box1 = std::make_shared<Rotate_y>(box1, 15);
     box1 = std::make_shared<Translate>(box1, Vec3(265,0,295));
 
-    std::shared_ptr<Hittable> box2 = box(Point3(0,0,0), Point3(165,165,165), white);
+    std::shared_ptr<Hittable> box2 = create_box(Point3(0,0,0), Point3(165,165,165), white);
     box2 = std::make_shared<Rotate_y>(box2, -18);
     box2 = std::make_shared<Translate>(box2, Vec3(130,0,65));
 
@@ -328,7 +326,7 @@ void cornell_smoke()
 }
 
 
-void cornell_box()
+void cornell_create_box()
 {
     Hittables world;
 
@@ -366,7 +364,7 @@ void cornell_box()
 										, Vec3(0,   555, 0)
 										, white));
 
-	std::shared_ptr<Hittable> box_1 = box(	Point3(0, 0, 0)
+	std::shared_ptr<Hittable> box_1 = create_box(	Point3(0, 0, 0)
 											, Point3(165, 330, 165)
 											, white);
 
@@ -374,7 +372,7 @@ void cornell_box()
 	box_1 = std::make_shared<Translate>(box_1, Vec3(265, 0, 295));
 	// world.add(box_1);
 
-	std::shared_ptr<Hittable> box_2 = box(	Point3(0, 0, 0)
+	std::shared_ptr<Hittable> box_2 = create_box(	Point3(0, 0, 0)
 											, Point3(165, 165, 165)
 											, white);
 
@@ -747,7 +745,7 @@ enum class Scene
 
 int main()
 {
-	Scene scene = Scene::LAB;
+	Scene scene = Scene::FINAL_SCENE;
 
 	switch (scene)
 	{
@@ -776,13 +774,13 @@ int main()
 			simple_light();
 			break;
 		case Scene::CORNELL:
-			cornell_box();
+			cornell_create_box();
 			break;
 		case Scene::CORNELL_SMOKE:
 			cornell_smoke();
 			break;
 		case Scene::FINAL_SCENE:
-			final_scene(800, 1000, 40);
+			final_scene(100, 3, 50);
 			break;
 		case Scene::LAB:
 			lab();

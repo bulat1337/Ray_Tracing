@@ -21,7 +21,7 @@ class Texture
 class Solid_color : public Texture
 {
   public:
-	Solid_color(const Color &set_albedo);
+	Solid_color(const Color &_albedo);
 
 	Solid_color(double red, double green, double blue);
 
@@ -39,11 +39,11 @@ class Checker : public Texture
 	std::shared_ptr<Texture> odd;
 
   public:
-	Checker(double set_scale
-			, std::shared_ptr<Texture> set_even
-			, std::shared_ptr<Texture> set_odd);
+	Checker(double _scale
+			, std::shared_ptr<Texture> _even
+			, std::shared_ptr<Texture> _odd);
 
-	Checker(double set_scale, const Color &set_even, const Color &set_odd);
+	Checker(double _scale, const Color &_even, const Color &_odd);
 
 	Color value(double u, double v, const Point3 &point) const override;
 };
@@ -64,7 +64,7 @@ class Noise : public Texture
   public:
 	Noise();
 
-	Noise(double set_scale);
+	Noise(double _scale);
 
 	Color value(double /*u*/, double /*v*/, const Point3 &point) const override;
 

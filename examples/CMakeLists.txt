@@ -11,19 +11,15 @@ foreach(EXAMPLE_SOURCE ${EXAMPLE_SOURCES})
 
     get_filename_component(EXAMPLE_NAME ${EXAMPLE_SOURCE} NAME_WE)
 
-    # Создаем исполняемый файл с именем, совпадающим с именем .cpp файла
     add_executable(${EXAMPLE_NAME} ${EXAMPLE_SOURCE})
 
-    # Линкуем с библиотекой ray_tracing
     target_link_libraries(${EXAMPLE_NAME} PRIVATE ray_tracing)
 
-    # Указываем, что для компиляции примеров нужны заголовочные файлы из include и external/include
     target_include_directories(${EXAMPLE_NAME} PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/../include
         ${CMAKE_CURRENT_SOURCE_DIR}/../external/include
     )
 
-    # Можно также добавить флаги компиляции, аналогичные тем, что используются для библиотеки
     target_compile_options(${EXAMPLE_NAME} PRIVATE
         -D_DEBUG
         -ggdb3

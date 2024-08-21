@@ -28,7 +28,7 @@ class Lambertian : public Material
   public:
 	Lambertian(const Color &albedo);
 
-	Lambertian(std::shared_ptr<Texture> set_texture);
+	Lambertian(std::shared_ptr<Texture> _texture);
 
 	bool scattered(	const Ray &in_ray
 					, const Hit_record &record
@@ -43,7 +43,7 @@ class Metal : public Material
 	double fuzz;
 
   public:
-	Metal(const Color &set_albedo, double set_fuzz);
+	Metal(const Color &_albedo, double _fuzz);
 
 	bool scattered(	const Ray &in_ray
 					, const Hit_record &record
@@ -59,7 +59,7 @@ class Dielectric : public Material
 	static double reflectance(double cosine, double refraction_id);
 
   public:
-	Dielectric(double set_refraction_id);
+	Dielectric(double _refraction_id);
 
 	virtual bool scattered(	const Ray &in_ray
 							, const Hit_record &record
@@ -80,9 +80,9 @@ class Diffuse_light : public Material
 	Color emitted(double u, double v, const Point3 &point) const override;
 
 	bool scattered(	const Ray &/*in_ray*/
-							, const Hit_record &/*record*/
-							, Color &/*attenuation*/
-							, Ray &/*scattered_ray*/) const override;
+					, const Hit_record &/*record*/
+					, Color &/*attenuation*/
+					, Ray &/*scattered_ray*/) const override;
 };
 
 class Isotropic : public Material
@@ -96,9 +96,9 @@ class Isotropic : public Material
 	Isotropic(std::shared_ptr<Texture> _texture);
 
 	bool scattered(	const Ray &in_ray
-							, const Hit_record &record
-							, Color &attenuation
-							, Ray &scattered_ray) const override;
+					, const Hit_record &record
+					, Color &attenuation
+					, Ray &scattered_ray) const override;
 };
 
 

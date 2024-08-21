@@ -74,8 +74,8 @@ class Triangle : public Planar
 	bool is_inside(double coeff_u, double coeff_v, Hit_record &record) const override;
 };
 
-std::shared_ptr<Hittables> box(	const Point3 &a
-								, const Point3 &b
-								, std::shared_ptr<Material> material);
+std::shared_ptr<Hittables> create_box(	const Point3 &a
+										, const Point3 &b
+										, std::shared_ptr<Material> material);
 
 #endif

@@ -14,19 +14,19 @@
 class Camera
 {
   public:
-	double aspect_ratio		= 1;
+	double aspect_ratio		= 1.0;
 	size_t image_width 		= 400;
-	size_t sampling			= 1;
-	size_t diffusion_depth	= 10;
+	size_t sampling			= 10;
+	size_t diffusion_depth	= 50;
 	double vertical_FOV     = 90;
-	Color  background;
+	Color  background       = Color(1.0, 1.0, 1.0);
 
-	Point3 lookfrom         = Point3(0, 0, 0);
-	Point3 lookat           = Point3(0, 0, -1);
-	Vec3   view_up          = Vec3(0, 1, 0);
+	Point3 lookfrom         = Point3(5.0, 0.0, 0.0);
+	Point3 lookat           = Point3(0.0, 0.0, 0.0);
+	Vec3   view_up          = Vec3  (0.0, 1.0, 0.0);
 
-	double defocus_angle = 0;
-	double focus_dist    = 10;
+	double defocus_angle    = 0;
+	double focus_dist       = 10;
 
 	Camera();
 
